@@ -11,4 +11,11 @@ isobuilder:
 	docker build . --tag isobuilder
 
 iso:
-	docker run -it -v$PWD:/kfs isobuilder /kfs/make_iso.sh
+	docker run -it -v${PWD}:/kfs isobuilder /kfs/make_iso.sh
+
+# add fno-builtin
+# • -fno-exception
+# • -fno-stack-protector
+# • -fno-rtti
+# • -nostdlib
+# • -nodefaultlibs

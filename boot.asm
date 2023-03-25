@@ -3,7 +3,8 @@ MBALIGN  equ  1 << 0            ; align loaded modules on page boundaries
 MEMINFO  equ  1 << 1            ; provide memory map
 MBFLAGS  equ  MBALIGN | MEMINFO ; this is the Multiboot 'flag' field
 MAGIC    equ  0x1BADB002        ; 'magic number' lets bootloader find the header
-CHECKSUM equ -(MAGIC + MBFLAGS)   ; checksum of above, to prove we are multiboot
+								; source: https://www.gnu.org/software/grub/manual/multiboot/multiboot.html#:~:text=of%20Multiboot%20header-,%E2%80%98magic%E2%80%99,identifying%20the%20header%2C%20which%20must%20be%20the%20hexadecimal%20value%200x1BADB002.,-%E2%80%98flags%E2%80%99
+CHECKSUM equ -(MAGIC + MBFLAGS) ; checksum of above, to prove we are multiboot
  
 ; Declare a multiboot header that marks the program as a kernel. These are magic
 ; values that are documented in the multiboot standard. The bootloader will
