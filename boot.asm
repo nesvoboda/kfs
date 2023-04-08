@@ -5,6 +5,7 @@ MBFLAGS  equ  MBALIGN | MEMINFO ; this is the Multiboot 'flag' field
 MAGIC    equ  0x1BADB002        ; 'magic number' lets bootloader find the header
 								; source: https://www.gnu.org/software/grub/manual/multiboot/multiboot.html#:~:text=of%20Multiboot%20header-,%E2%80%98magic%E2%80%99,identifying%20the%20header%2C%20which%20must%20be%20the%20hexadecimal%20value%200x1BADB002.,-%E2%80%98flags%E2%80%99
 CHECKSUM equ -(MAGIC + MBFLAGS) ; checksum of above, to prove we are multiboot
+                                ; Checksum rule: 
  
 ; Declare a multiboot header that marks the program as a kernel. These are magic
 ; values that are documented in the multiboot standard. The bootloader will
@@ -38,6 +39,122 @@ stack_top:
 ; doesn't make sense to return from this function as the bootloader is gone.
 ; Declare _start as a function symbol with the given symbol size.
 section .text
+
+
+
+; gdt
+
+; This will set up our new segment registers. We need to do
+; something special in order to set CS. We do what is called a
+; far jump. A jump that includes a segment as well as an offset.
+; This is declared in C as 'extern void gdt_flush();'
+
+global gdt_flush     ; Allows the C code to link to this
+extern gp            ; Says that '_gp' is in another file
+gdt_flush:
+	lgdt [gp]        ; Load the GDT with our '_gp' which is a special pointer
+	mov ax, 0x10      ; 0x10 is the offset in the GDT to our data segment
+	mov ds, ax
+	mov es, ax
+	mov fs, ax
+	mov gs, ax
+	mov ss, ax
+	jmp 0x08:flush2   ; 0x08 is the offset to our code segment: Far jump!
+flush2:
+	ret               ; Returns back to the C code!
+
+global idt_flush   ; Declare the symbol as globally visible
+
+idt_flush:
+    mov eax, [esp+4] ; Get the pointer to the IDT, passed as a parameter
+    lidt [eax]       ; Load the IDT pointer
+    ret              ; Return to the calling function
+
+global isr0  ; Declare the symbol as globally visible
+
+%macro ISR_NOERRCODE 1  ; Define a macro, taking one parameter
+    global isr%1        ; %1 accesses the first parameter.
+    isr%1:
+        cli
+        push byte 0
+        push byte %1
+        jmp isr_common_stub
+%endmacro
+
+%macro ISR_ERRCODE 1
+    global isr%1
+    isr%1:
+        cli
+        push byte %1
+        jmp isr_common_stub
+%endmacro
+
+ISR_NOERRCODE 0
+ISR_NOERRCODE 1
+ISR_NOERRCODE 2
+ISR_NOERRCODE 3
+ISR_NOERRCODE 4
+ISR_NOERRCODE 5
+ISR_NOERRCODE 6
+ISR_NOERRCODE 7
+ISR_ERRCODE 8
+ISR_NOERRCODE 9
+ISR_ERRCODE 10
+ISR_ERRCODE 11
+ISR_ERRCODE 12
+ISR_ERRCODE 13
+ISR_ERRCODE 14
+ISR_NOERRCODE 15
+ISR_NOERRCODE 16
+ISR_NOERRCODE 17
+ISR_NOERRCODE 18
+ISR_NOERRCODE 19
+ISR_NOERRCODE 20
+ISR_NOERRCODE 21
+ISR_NOERRCODE 22
+ISR_NOERRCODE 23
+ISR_NOERRCODE 24
+ISR_NOERRCODE 25
+ISR_NOERRCODE 26
+ISR_NOERRCODE 27
+ISR_NOERRCODE 28
+ISR_NOERRCODE 29
+ISR_NOERRCODE 30
+ISR_NOERRCODE 31
+ISR_NOERRCODE 32
+
+
+; In idt.c
+extern isr_handler
+
+; This is our common ISR stub. It saves the processor state, sets
+; up for kernel mode segments, calls the C-level fault handler,
+; and finally restores the stack frame.
+isr_common_stub:
+   pusha                    ; Pushes edi,esi,ebp,esp,ebx,edx,ecx,eax
+
+   mov ax, ds               ; Lower 16-bits of eax = ds.
+   push eax                 ; save the data segment descriptor
+
+   mov ax, 0x10  ; load the kernel data segment descriptor
+   mov ds, ax
+   mov es, ax
+   mov fs, ax
+   mov gs, ax
+
+   call isr_handler
+
+   pop eax        ; reload the original data segment descriptor
+   mov ds, ax
+   mov es, ax
+   mov fs, ax
+   mov gs, ax
+
+   popa                     ; Pops edi,esi,ebp...
+   add esp, 8     ; Cleans up the pushed error code and pushed ISR number
+   sti
+   iret           ; pops 5 things at once: CS, EIP, EFLAGS, SS, and ESP
+
 global _start:function (_start.end - _start)
 _start:
 	; The bootloader has loaded us into 32-bit protected mode on a x86
@@ -64,7 +181,8 @@ _start:
 	; yet. The GDT should be loaded here. Paging should be enabled here.
 	; C++ features such as global constructors and exceptions will require
 	; runtime support to work as well.
- 
+
+
 	; Enter the high-level kernel. The ABI requires the stack is 16-byte
 	; aligned at the time of the call instruction (which afterwards pushes
 	; the return pointer of size 4 bytes). The stack was originally 16-byte
