@@ -1,13 +1,4 @@
-typedef unsigned int   u32int;
-typedef          int   s32int;
-typedef unsigned short u16int;
-typedef          short s16int;
-typedef unsigned char  u8int;
-typedef          char  s8int;
-
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdint.h>
+#include "idt.h"
  
 // A struct describing an interrupt gate.
 struct idt_entry_struct
@@ -220,9 +211,6 @@ void register_interrupt_handler(u8int n, isr_t handler)
   interrupt_handlers[n] = handler;
 }
 
-
-
-
 void init_timer(u32int frequency);
 /*
 arguments:
@@ -281,6 +269,7 @@ static void keyboard_handler(registers_t regs)
 	char scancode;
 	scancode = inb(KBD_DATA_REG);
 	terminal_putchar(kbdus[scancode & KBD_SCANCODE_MASK]);
+	terminal_putchar('+');
 
    // terminal_putchar(scan_code);
 }
@@ -400,7 +389,6 @@ void irq_handler(registers_t regs)
    // Send reset signal to master. (As well as slave, if necessary).
    outb(0x20, 0x20);
 
-
    if (interrupt_handlers[regs.int_no] != 0)
    {
        isr_t handler = interrupt_handlers[regs.int_no];
@@ -419,16 +407,11 @@ static void idt_set_gate(u8int num, u32int base, u16int sel, u8int flags)
    idt_entries[num].flags   = flags /* | 0x60 */;
 }
 
-
-
-
-
-
 // This gets called from our ASM interrupt handler stub.
 void isr_handler(registers_t regs)
 {
-   terminal_writestring("recieved interrupt: ");
-   terminal_putchar(regs.int_no - '0');
+   // terminal_writestring("recieved interrupt: ");
+   // terminal_putchar(regs.int_no - '0');
 //    monitor_put('\n');
     if (interrupt_handlers[regs.int_no] != 0)
     {
@@ -436,7 +419,6 @@ void isr_handler(registers_t regs)
         handler(regs);
     }
 }
-
 
 u32int tick = 0;
 
