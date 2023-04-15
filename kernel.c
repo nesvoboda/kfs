@@ -2,7 +2,7 @@
 #include "gdt.h"
 #include "idt.h"
  
-
+#include "screen_handler.h"
 
 void kernel_main(void) 
 {
@@ -21,4 +21,8 @@ void kernel_main(void)
 	asm volatile ("int $0x3");
 
 	asm volatile ("int $0x21");
+
+
+	// Needed for screen handler
+	init_screen();
 }
