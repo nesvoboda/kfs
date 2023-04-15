@@ -57,5 +57,104 @@ void screen_add_char(char c, uint8_t color, int screen_no) {
 
     // Else
     _refresh_screen(screen_no);
+}
 
+void screen_erase(int screen_no) {
+    int res = remove_character(current_index[screen_no], screen_no);
+    if (res != 0) {
+        return;
+    }
+
+    current_index[screen_no] -= 1;
+
+    // If erasing causes scroll
+    if (_len_to_print(screen_no, current_start_position[screen_no]) < 1) {
+        // Go back one whole screen
+        current_start_position[screen_no] -= 2000;
+
+        //Reset to 0 if it goes below 0
+        if (current_start_position[screen_no] < 0) {
+            current_start_position[screen_no] = 0;
+        } 
+    }
+
+    // Else
+    _refresh_screen(screen_no);
+}
+
+void _scroll_left(int screen_no) {
+    if (current_index[screen_no] == 0) {
+        return;
+    }
+
+    current_index[screen_no] -= 1;
+    // TODO cursor?
+
+    if (current_index[screen_no] <= current_start_position[screen_no]) {
+        // Go back one whole screen
+        current_start_position[screen_no] -= 2000;
+
+        //Reset to 0 if it goes below 0
+        if (current_start_position[screen_no] < 0) {
+            current_start_position[screen_no] = 0;
+        } 
+    }
+}
+
+void _scroll_right(int screen_no) {
+    if (current_index[screen_no] >= _len_to_print(screen_no, current_start_position[screen_no])) {
+        return;
+    }
+
+    current_index[screen_no] += 1;
+    // TODO cursor?
+
+    if (current_index[screen_no] >= current_start_position[screen_no] + 2000) {
+        current_start_position[screen_no] += 80;
+    }
+}
+
+void _scroll_up(int screen_no) {
+    if (current_index[screen_no] <= 80) {
+        return;
+    }
+
+    current_index[screen_no] -= 80;
+    // TODO cursor?
+
+    if (current_index[screen_no] <= current_start_position[screen_no]) {
+        // Go back one whole screen
+        current_start_position[screen_no] -= 2000;
+
+        //Reset to 0 if it goes below 0
+        if (current_start_position[screen_no] < 0) {
+            current_start_position[screen_no] = 0;
+        } 
+    }
+}
+
+void _scroll_down(int screen_no) {
+    if ((current_index[screen_no]+80) >= _len_to_print(screen_no, current_start_position[screen_no])) {
+        return;
+    }
+
+    current_index[screen_no] += 80;
+    // TODO cursor?
+
+    if (current_index[screen_no] >= current_start_position[screen_no] + 2000) {
+        current_start_position[screen_no] += 80;
+    }
+}
+
+void screen_handle_scroll(enum direction dir, int screen_no) {
+    if (dir == LEFT) {
+        _scroll_left(screen_no);
+    } else if (dir == RIGHT) {
+        _scroll_right(screen_no);
+    } else if (dir == TOP) {
+        _scroll_up(screen_no);
+    } else if (dir == BOTTOM) {
+        _scroll_down(screen_no);
+    }
+    _refresh_screen(screen_no);
 }
