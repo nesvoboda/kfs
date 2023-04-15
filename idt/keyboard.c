@@ -1,6 +1,7 @@
 #include "idt.h"
 #include "direction.h"
 #include "keyboard.h"
+#include "screen_handler.h"
 
 
 void handle_scroll(enum direction dir)
@@ -17,6 +18,8 @@ void next_screen()
 {
   if (++current_screen == SCREEN_MAX)
     current_screen = 0;
+
+  refresh_screen(current_screen);
 }
 
 void switch_color(int color)
@@ -35,6 +38,7 @@ void keyboard_handler(registers_t regs)
   
 	char scancode;
 	scancode = inb(KBD_DATA_REG);
+
   if ((scancode & KBD_STATUS_MASK) == 0)
   {
 
@@ -46,17 +50,15 @@ void keyboard_handler(registers_t regs)
       handle_scroll(LEFT);
     else if (keyboard_flags.arrow_flag && scancode == RIGHT_PRESSED)
       handle_scroll(RIGHT);
-    else if (keyboard_flags.arrow_flag && scancode == RIGHT_PRESSED)
-      handle_scroll(RIGHT);
     else if (scancode == ALT)
       keyboard_flags.alt_flag = 1;
     else if (scancode == TAB && keyboard_flags.alt_flag)
-      switch_screen();
+      next_screen();
     else if ((scancode >= 2 && scancode <= 9) && keyboard_flags.alt_flag)
       switch_color(scancode - 1);
     else if (scancode == BACKSPAPCE)
       erase();
-    else
+    else if (scancode != ARROW && scancode != LEFT_PRESSED  && scancode != BOTTOM_PRESSED  && scancode != UP_PRESSED  && scancode != RIGHT_PRESSED)
       add_char(kbdus[scancode & KBD_SCANCODE_MASK]);
   }
   else   

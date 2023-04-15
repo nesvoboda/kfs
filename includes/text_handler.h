@@ -2,6 +2,7 @@
 # define TEXT_HANDLER_H
 
 #include "screen.h"
+#include "config.h"
 
 typedef struct text_char {
     char c;

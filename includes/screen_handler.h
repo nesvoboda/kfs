@@ -4,13 +4,13 @@
 # include "direction.h"
 # include "screen.h"
 # include "text_handler.h"
-
+# include "config.h"
 
 void screen_handle_scroll(enum direction dir, int screen_no);
 void screen_add_char(char c, uint8_t color, int screen_no);
 void screen_erase(int screen_no);
 
 void init_screen();
-
+void refresh_screen(int screen_no);
 
 #endif

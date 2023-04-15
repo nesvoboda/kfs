@@ -1,6 +1,8 @@
 #ifndef KEYBOARD_H
 # define KEYBOARD_H
 
+# include "config.h"
+
 const unsigned char kbdus[128] =
 {
     0,  27, '1', '2', '3', '4', '5', '6', '7', '8',	/* 9 */
@@ -63,9 +65,9 @@ typedef struct keyboard_flags {
 } keyboard_flags_t;
 
 int current_screen = 0;
-uint8_t current_color;
+uint8_t current_color = 6;
 keyboard_flags_t keyboard_flags = {0, 0};
-#define SCREEN_MAX 5
+
 
 
 #endif

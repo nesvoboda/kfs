@@ -1,13 +1,11 @@
 #include "screen_handler.h"
 
-# define MAX_SCREENS 3
+int current_index[SCREEN_MAX];
 
-int current_index[MAX_SCREENS];
-
-int current_start_position[MAX_SCREENS];
+int current_start_position[SCREEN_MAX];
 
 void init_screen() {
-    for (int i = 0; i < MAX_SCREENS; i++) {
+    for (int i = 0; i < SCREEN_MAX; i++) {
         current_index[i] = 0;
         current_start_position[i] = 0;
     }
@@ -17,21 +15,22 @@ int _len_to_print(int screen_no, int start_position) {
     return get_len(screen_no) - start_position;
 }
 
-void _refresh_screen(int screen_no) {
+void refresh_screen(int screen_no) {
     text_char_t *text = get_text(screen_no);
 
     // invariant: never too many characters to write
     int start_writing_at = current_start_position[screen_no]; 
 
-    int x = 0;
-    int y = 0;
+    int char_position = start_writing_at;
 
-    for (int i = start_writing_at; i < get_len(screen_no); i++) {
-        terminal_putentryat(text[i].c, text[i].color, x, y);
-        if (++x == VGA_WIDTH) {
-            x = 0;
-            if (++y == VGA_HEIGHT)
-                y = 0;
+    for (int y = 0; y < VGA_HEIGHT; y++) {
+        for (int x = 0; x < VGA_WIDTH; x++) {
+            if (char_position < get_len(screen_no)) {
+                terminal_putentryat(text[char_position].c, text[char_position].color, x, y);
+            } else {
+                terminal_putentryat(' ', 0, x, y);
+            }
+            char_position++;
         }
     }
 }
@@ -56,7 +55,7 @@ void screen_add_char(char c, uint8_t color, int screen_no) {
     }
 
     // Else
-    _refresh_screen(screen_no);
+    refresh_screen(screen_no);
 }
 
 void screen_erase(int screen_no) {
@@ -79,7 +78,7 @@ void screen_erase(int screen_no) {
     }
 
     // Else
-    _refresh_screen(screen_no);
+    refresh_screen(screen_no);
 }
 
 void _scroll_left(int screen_no) {
@@ -101,8 +100,9 @@ void _scroll_left(int screen_no) {
     }
 }
 
+/// abc
 void _scroll_right(int screen_no) {
-    if (current_index[screen_no] >= _len_to_print(screen_no, current_start_position[screen_no])) {
+    if (current_index[screen_no] >= (get_len(screen_no))) {
         return;
     }
 
@@ -134,11 +134,13 @@ void _scroll_up(int screen_no) {
 }
 
 void _scroll_down(int screen_no) {
-    if ((current_index[screen_no]+80) >= _len_to_print(screen_no, current_start_position[screen_no])) {
-        return;
+    if ((current_index[screen_no]+80) >= (get_len(screen_no))) {
+        current_index[screen_no] = get_len(screen_no);
+    } else {
+        current_index[screen_no] += 80;
     }
 
-    current_index[screen_no] += 80;
+
     // TODO cursor?
 
     if (current_index[screen_no] >= current_start_position[screen_no] + 2000) {
@@ -156,5 +158,5 @@ void screen_handle_scroll(enum direction dir, int screen_no) {
     } else if (dir == BOTTOM) {
         _scroll_down(screen_no);
     }
-    _refresh_screen(screen_no);
+    refresh_screen(screen_no);
 }
