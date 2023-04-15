@@ -6,6 +6,7 @@
 # include <stdint.h>
 # include "utils.h"
 # include "screen.h"
+
 // Enables registration of callbacks for interrupts or IRQs.
 // For IRQs, to ease confusion, use the #defines above as the
 // first parameter.
@@ -23,6 +24,7 @@ uint8_t inb(uint16_t port);
 void outb(uint16_t port, uint8_t val);
 void init_timer(u32int frequency);
 void keyboard_handler(registers_t regs);
-
+void switch_to_first_terminal_buffer(void);
+void switch_to_second_terminal_buffer(void);
 
 #endif

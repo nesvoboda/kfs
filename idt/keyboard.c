@@ -48,8 +48,21 @@ void keyboard_handler(registers_t regs)
 {
 	char scancode;
 	scancode = inb(KBD_DATA_REG);
-	
+	ft_putnbr(scancode);
+
    if ((scancode & KBD_STATUS_MASK) == 0) {
+      ft_putnbr(scancode);
+      if (scancode == 1)
+      {
+        terminal_writestring('switch to first');
+        switch_to_second_terminal_buffer();
+      }
+      if (scancode  == 15)
+      {
+        terminal_writestring('switch to second');
+
+        switch_to_first_terminal_buffer();
+      }
       terminal_putchar(kbdus[scancode & KBD_SCANCODE_MASK]);
    }
 }

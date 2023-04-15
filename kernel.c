@@ -6,6 +6,8 @@
 
 void kernel_main(void) 
 {
+
+	
 	gdt_install();
 	init_idt();
 
