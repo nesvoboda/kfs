@@ -9,6 +9,7 @@ struct idt_entry_struct
    u8int  flags;               // More flags. See documentation.
    u16int base_hi;             // The upper 16 bits of the address to jump to.
 } __attribute__((packed));
+
 typedef struct idt_entry_struct idt_entry_t;
 
 // A struct describing a pointer to an array of interrupt handlers.
@@ -94,12 +95,6 @@ extern void irq15 ();
 #define PIC2_COMMAND PIC2
 #define PIC2_DATA (PIC2+1)
 
-/*This function send value to IO location*/
-static inline void outb(uint16_t port, uint8_t val)
-{
-	asm volatile( "outb %0, %1" : : "a"(val), "Nd"(port) );
-}
-
 
 #define PIC_EOI		0x20		/* End-of-interrupt command code */
  
@@ -112,14 +107,6 @@ void PIC_sendEOI(unsigned char irq)
 }
 
 /*Receives value from I/O location*/
-static inline uint8_t inb(uint16_t port)
-{
-    uint8_t ret;
-    asm volatile ( "inb %1, %0"
-                   : "=a"(ret)
-                   : "Nd"(port) );
-    return ret;
-}
 
 static inline void io_wait(void)
 {
@@ -147,16 +134,6 @@ static inline void io_wait(void)
 #define IRQ14 46
 #define IRQ15 47
 
-// Enables registration of callbacks for interrupts or IRQs.
-// For IRQs, to ease confusion, use the #defines above as the
-// first parameter.
-typedef struct registers
-{
-   u32int ds;                  // Data segment selector
-   u32int edi, esi, ebp, esp, ebx, edx, ecx, eax; // Pushed by pusha.
-   u32int int_no, err_code;    // Interrupt number and error code (if applicable)
-   u32int eip, cs, eflags, useresp, ss; // Pushed by the processor automatically.
-} registers_t;
 
 typedef void (*isr_t)(registers_t);
 
@@ -173,6 +150,23 @@ arguments:
 		vectors on the master become offset1..offset1+7
 	offset2 - same for slave PIC: offset2..offset2+7
 */
+
+
+uint8_t inb(uint16_t port)
+{
+    uint8_t ret;
+    asm volatile ( "inb %1, %0"
+                   : "=a"(ret)
+                   : "Nd"(port) );
+    return ret;
+}
+
+/*This function send value to IO location*/
+void outb(uint16_t port, uint8_t val)
+{
+	asm volatile( "outb %0, %1" : : "a"(val), "Nd"(port) );
+}
+
 void PIC_remap(int offset1, int offset2)
 {
 	// unsigned char a1, a2;

@@ -44,7 +44,7 @@ const unsigned char kbdus[128] =
 #define KBD_SCANCODE_MASK   0x7f
 #define KBD_STATUS_MASK     0x80
 
-static void keyboard_handler(registers_t regs)
+void keyboard_handler(registers_t regs)
 {
 	char scancode;
 	scancode = inb(KBD_DATA_REG);

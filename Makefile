@@ -1,5 +1,5 @@
 
-src_files = gdt/gdt.c idt/idt.c screen/screen.c utils/utils.c kernel.c
+src_files = gdt/gdt.c idt/idt.c screen/screen.c utils/utils.c kernel.c idt/keyboard.c
 
 CFLAGS = -target i386-none-elf -ffreestanding -fno-builtin -nostdlib -I includes
 
