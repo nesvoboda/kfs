@@ -11,5 +11,8 @@ typedef unsigned char  u8int;
 typedef          char  s8int;
 
 size_t strlen(const char* str);
+void	*memset(void *b, int c, int len);
+void	ft_putnbr(int n);
+
 
 #endif

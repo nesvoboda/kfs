@@ -101,49 +101,6 @@ static inline void outb(uint16_t port, uint8_t val)
 }
 
 
-const unsigned char kbdus[128] =
-{
-    0,  27, '1', '2', '3', '4', '5', '6', '7', '8',	/* 9 */
-  '9', '0', '-', '=', '\b',	/* Backspace */
-  '\t',			/* Tab */
-  'q', 'w', 'e', 'r',	/* 19 */
-  't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\n',	/* Enter key */
-    0,			/* 29   - Control */
-  'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';',	/* 39 */
- '\'', '`',   0,		/* Left shift */
- '\\', 'z', 'x', 'c', 'v', 'b', 'n',			/* 49 */
-  'm', ',', '.', '/',   0,				/* Right shift */
-  '*',
-    0,	/* Alt */
-  ' ',	/* Space bar */
-    0,	/* Caps lock */
-    0,	/* 59 - F1 key ... > */
-    0,   0,   0,   0,   0,   0,   0,   0,
-    0,	/* < ... F10 */
-    0,	/* 69 - Num lock*/
-    0,	/* Scroll Lock */
-    0,	/* Home key */
-    0,	/* Up Arrow */
-    0,	/* Page Up */
-  '-',
-    0,	/* Left Arrow */
-    0,
-    0,	/* Right Arrow */
-  '+',
-    0,	/* 79 - End key*/
-    0,	/* Down Arrow */
-    0,	/* Page Down */
-    0,	/* Insert Key */
-    0,	/* Delete Key */
-    0,   0,   0,
-    0,	/* F11 Key */
-    0,	/* F12 Key */
-    0,	/* All other keys are undefined */
-};
-
-#define KBD_DATA_REG        0x60    /* I/O port for keyboard data */
-#define KBD_SCANCODE_MASK   0x7f
-#define KBD_STATUS_MASK     0x80
 #define PIC_EOI		0x20		/* End-of-interrupt command code */
  
 void PIC_sendEOI(unsigned char irq)
@@ -154,7 +111,6 @@ void PIC_sendEOI(unsigned char irq)
 	outb(PIC1_COMMAND,PIC_EOI);
 }
 
-
 /*Receives value from I/O location*/
 static inline uint8_t inb(uint16_t port)
 {
@@ -164,6 +120,7 @@ static inline uint8_t inb(uint16_t port)
                    : "Nd"(port) );
     return ret;
 }
+
 static inline void io_wait(void)
 {
     outb(0x80, 0);
@@ -210,8 +167,6 @@ void register_interrupt_handler(u8int n, isr_t handler)
 
   interrupt_handlers[n] = handler;
 }
-
-void init_timer(u32int frequency);
 /*
 arguments:
 	offset1 - vector offset for master PIC
@@ -248,31 +203,6 @@ void PIC_remap(int offset1, int offset2)
 }
 
 
-void	*memset(void *b, int c, int len)
-{
-	unsigned char	*str;
-	unsigned char	*lim;
-
-	str = b;
-	lim = b + len;
-	while (str != lim)
-		*(str++) = (unsigned char)c;
-	return (b);
-}
-
-
-void terminal_writestring(const char* data);
-void terminal_putchar(char c);
-
-static void keyboard_handler(registers_t regs)
-{
-	char scancode;
-	scancode = inb(KBD_DATA_REG);
-	terminal_putchar(kbdus[scancode & KBD_SCANCODE_MASK]);
-	terminal_putchar('+');
-
-   // terminal_putchar(scan_code);
-}
 
 void init_idt()
 {
@@ -283,16 +213,7 @@ void init_idt()
    memset(&interrupt_handlers, 0, sizeof(isr_t)*256);
    PIC_remap(0x20, 0x28);
    asm("sti");
-   // outb(0x20, 0x11);
-   // outb(0xA0, 0x11);
-   // outb(0x21, 0x20);
-   // outb(0xA1, 0x28);
-   // outb(0x21, 0x04);
-   // outb(0xA1, 0x02);
-   // outb(0x21, 0x01);
-   // outb(0xA1, 0x01);
-   // outb(0x21, 0x0);
-   // outb(0xA1, 0x0);
+
    idt_set_gate( 0, (u32int)isr0 , 0x08, 0x8E);
    idt_set_gate( 1, (u32int)isr1 , 0x08, 0x8E);
    idt_set_gate( 2, (u32int)isr2 , 0x08, 0x8E);
@@ -350,29 +271,6 @@ void init_idt()
 
 }
 
-
-void	ft_putnbr(int n)
-{
-	int nbr;
-
-	if (n < 0)
-	{
-		terminal_putchar('-');
-		nbr = (n == -2147483648) ? 2147483648 : -n;
-	}
-	else
-		nbr = n;
-	if (nbr > 9)
-	{
-		ft_putnbr(nbr / 10);
-		ft_putnbr(nbr % 10);
-	}
-	if (nbr <= 9)
-	{
-		terminal_putchar(nbr + '0');
-	}
-}
-
 // This gets called from our ASM interrupt handler stub.
 void irq_handler(registers_t regs)
 {
@@ -410,9 +308,6 @@ static void idt_set_gate(u8int num, u32int base, u16int sel, u8int flags)
 // This gets called from our ASM interrupt handler stub.
 void isr_handler(registers_t regs)
 {
-   // terminal_writestring("recieved interrupt: ");
-   // terminal_putchar(regs.int_no - '0');
-//    monitor_put('\n');
     if (interrupt_handlers[regs.int_no] != 0)
     {
         isr_t handler = interrupt_handlers[regs.int_no];
