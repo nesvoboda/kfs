@@ -6,6 +6,9 @@
 
 # include "utils.h"
 
+static const size_t VGA_WIDTH = 80;
+static const size_t VGA_HEIGHT = 25;
+
 void terminal_initialize(void);
 void terminal_setcolor(uint8_t color);
 void terminal_putentryat(char c, uint8_t color, size_t x, size_t y);
