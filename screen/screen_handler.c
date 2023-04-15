@@ -42,7 +42,11 @@ void screen_add_char(char c, uint8_t color, int screen_no) {
     new_char.color = color;
 
     // Write character to text layer
-    insert_character(new_char, current_index[screen_no], screen_no);
+    int res = insert_character(new_char, current_index[screen_no], screen_no);
+
+    if (res != 0) {
+        return;
+    }
 
     current_index[screen_no] += 1;
 
