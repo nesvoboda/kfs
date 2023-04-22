@@ -65,7 +65,7 @@ typedef struct keyboard_flags {
 } keyboard_flags_t;
 
 int current_screen = 0;
-uint8_t current_color = 6;
+uint8_t current_color = 4;
 keyboard_flags_t keyboard_flags = {0, 0};
 
 

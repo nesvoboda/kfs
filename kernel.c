@@ -3,7 +3,19 @@
 #include "idt.h"
 #include "cursor.h"
 #include "screen_handler.h"
+// #include "timer.h"                                         
 
+
+const char * intro_text[] = {
+"                                                                                ",
+"    ____  __    ___   _____ __  __   ____  _____    __ __ ___                   ",
+"   / __ )/ /   /   | / ___// / / /  / __ \\/ ___/   / // /|__ \\                  ",
+"  / __  / /   / /| | \\__ \\/ /_/ /  / / / /\\__ \\   / // /___/ /                  ",
+" / /_/ / /___/ ___ |___/ / __  /  / /_/ /___/ /  /__  __/ __/                   ",
+"/_____/_____/_/  |_/____/_/ /_/   \\____//____/     /_/ /____/                   ",
+"                                                                                ",
+"                                                                                ",
+};
 void kernel_main(void) 
 {
 
@@ -13,16 +25,20 @@ void kernel_main(void)
 
 	/* Initialize terminal interface */
 	terminal_initialize();
-	init_timer(1);
-
-	terminal_writestring("42");
+	// init_timer(1);
+	// init_timer(1);
+	//ASCII ART
+    int i;
+	int n_array = 8;
+    for (i = 0; i < n_array; i++) {
+		terminal_writestring(intro_text[i]);
+    }
 	enable_cursor(0, 15);
-	// Test interrupt
-	asm volatile ("int $0x3");
-
-	asm volatile ("int $0x21");
-
-
+	// sleep(5);
+	for (i = 0; i < 10; i++)
+	{
+		update_cursor(320 + i);
+	}
 	// Needed for screen handler
 	init_screen();
 }
