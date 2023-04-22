@@ -1,7 +1,4 @@
 #include "screen.h"
-
-
-
  
 static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg) 
 {
@@ -126,5 +123,66 @@ void terminal_writestring_pos(const char *data, int x, int y)
 			if (++local_terminal_row == VGA_HEIGHT)
 				local_terminal_row = 0;
 		}
+	}
+}
+
+void	ft_putnbr_pos(int n, int x, int y)
+{
+	int nbr;
+
+	if (n < 0)
+	{
+		terminal_putentryat('-', terminal_color, x++, y++);
+		nbr = (n == -2147483648) ? 2147483647 : -n;
+	}
+	else
+		nbr = n;
+	if (nbr > 9)
+	{
+		ft_putnbr_pos(nbr / 10, x, y);
+		x += numlen(nbr / 10);
+		ft_putnbr_pos(nbr % 10, x++, y);
+	}
+	if (nbr <= 9)
+	{
+		terminal_putentryat(nbr + '0', terminal_color, x, y);
+	}
+}
+
+void	ft_putnbr(int n)
+{
+	ft_putnbr_pos(n, terminal_row, terminal_column);
+	terminal_column += numlen(n);
+}
+
+int numlen(int n)
+{
+	int i = 0;
+	while (n > 0) {
+		n /= 10;
+		i++;
+	}
+	return i;
+}
+
+void	ft_putnbr_classic(int n)
+{
+	int nbr;
+
+	if (n < 0)
+	{
+		terminal_putchar('-');
+		nbr = (n == -2147483648) ? 2147483647 : -n;
+	}
+	else
+		nbr = n;
+	if (nbr > 9)
+	{
+		ft_putnbr(nbr / 10);
+		ft_putnbr(nbr % 10);
+	}
+	if (nbr <= 9)
+	{
+		terminal_putchar(nbr + '0');
 	}
 }

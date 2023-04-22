@@ -24,7 +24,5 @@ uint8_t inb(uint16_t port);
 void outb(uint16_t port, uint8_t val);
 void init_timer(u32int frequency);
 void keyboard_handler(registers_t regs);
-void switch_to_first_terminal_buffer(void);
-void switch_to_second_terminal_buffer(void);
 
 #endif

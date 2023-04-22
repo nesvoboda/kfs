@@ -268,9 +268,6 @@ void init_idt()
 // This gets called from our ASM interrupt handler stub.
 void irq_handler(registers_t regs)
 {
-   // terminal_writestring("recieved interrupt bruh: ");
-   // ft_putnbr(regs.int_no);
-
    // Send an EOI (end of interrupt) signal to the PICs.
    // If this interrupt involved the slave.
    if (regs.int_no >= 40)
@@ -308,36 +305,3 @@ void isr_handler(registers_t regs)
         handler(regs);
     }
 }
-
-// u32int tick = 0;
-
-// static void timer_callback(registers_t regs)
-// {
-//    tick++;
-//    // terminal_writestring("Tick: ");
-//    // terminal_writestring(tick);
-//    // terminal_writestring("\n");
-// }
-
-// void init_timer(u32int frequency)
-// {
-//    // Firstly, register our timer callback.
-//    register_interrupt_handler(IRQ0, &timer_callback);
-// 	terminal_writestring("timer initz");
-
-//    // The value we send to the PIT is the value to divide it's input clock
-//    // (1193180 Hz) by, to get our required frequency. Important to note is
-//    // that the divisor must be small enough to fit into 16-bits.
-//    u32int divisor = 1193180 / frequency;
-
-//    // Send the command byte.
-//    outb(0x43, 0x36);
-
-//    // Divisor has to be sent byte-wise, so split here into upper/lower bytes.
-//    u8int l = (u8int)(divisor & 0xFF);
-//    u8int h = (u8int)( (divisor>>8) & 0xFF );
-
-//    // Send the frequency divisor.
-//    outb(0x40, l);
-//    outb(0x40, h);
-// }

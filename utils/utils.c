@@ -20,25 +20,3 @@ void	*memset(void *b, int c, int len)
 		*(str++) = (unsigned char)c;
 	return (b);
 }
-
-void	ft_putnbr(int n)
-{
-	int nbr;
-
-	if (n < 0)
-	{
-		terminal_putchar('-');
-		nbr = (n == -2147483648) ? 2147483648 : -n;
-	}
-	else
-		nbr = n;
-	if (nbr > 9)
-	{
-		ft_putnbr(nbr / 10);
-		ft_putnbr(nbr % 10);
-	}
-	if (nbr <= 9)
-	{
-		terminal_putchar(nbr + '0');
-	}
-}

@@ -96,5 +96,6 @@ int		printk(enum log_level level, const char *str, ...)
 	}
 	va_end(kwargs);
 	end_log();
+	refresh_logs();
 	return (ret);
 }

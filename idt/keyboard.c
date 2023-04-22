@@ -29,7 +29,6 @@ void add_char(char c)
   screen_add_char(c, current_color, current_screen);
 }
 
-
 void keyboard_handler(registers_t regs)
 {
   
@@ -55,8 +54,13 @@ void keyboard_handler(registers_t regs)
       switch_color(scancode - 1);
     else if (scancode == BACKSPAPCE)
       erase();
-    else if (scancode != ARROW && scancode != LEFT_PRESSED  && scancode != BOTTOM_PRESSED  && scancode != UP_PRESSED  && scancode != RIGHT_PRESSED)
-      add_char(kbdus[scancode & KBD_SCANCODE_MASK]);
+    else if (scancode != ARROW && scancode != LEFT_PRESSED  && scancode != BOTTOM_PRESSED  && scancode != UP_PRESSED  && scancode != RIGHT_PRESSED) {
+      char c = kbdus[scancode & KBD_SCANCODE_MASK];
+      if (c > 32 & c <= 127) {
+        add_char(c);
+      }
+    }
+      
   }
   else   
   {

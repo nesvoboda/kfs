@@ -36,5 +36,9 @@ void terminal_putchar(char c);
 void terminal_write(const char* data, size_t size);
 void terminal_writestring(const char* data);
 void terminal_writestring_pos(const char *data, int x, int y);
- 
+void	ft_putnbr(int n);
+void	ft_putnbr_pos(int n, int x, int y);
+void	ft_putnbr_classic(int n);
+int numlen(int i);
+
 #endif

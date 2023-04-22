@@ -31,8 +31,8 @@ void _refresh_status_zone(int screen_no) {
     }
     uint8_t text_color = vga_entry_color(VGA_COLOR_WHITE, VGA_COLOR_LIGHT_BLUE);
     terminal_setcolor(text_color);
-    terminal_writestring_pos("blash os - screen ", 30, 0);
-    terminal_putentryat(screen_no + '0',text_color, 48, 0);
+    terminal_writestring_pos("blashOS - screen ", 30, 0);
+    terminal_putentryat(screen_no + '0',text_color, 47, 0);
     for (int y = 1; y < START_LINE; y++) {
         for (int x = 0; x < VGA_WIDTH; x++) {
             terminal_putentryat('.',
@@ -42,6 +42,8 @@ void _refresh_status_zone(int screen_no) {
                 ), x, y);
         }
     }
+    terminal_setcolor(vga_entry_color(VGA_COLOR_BLACK, VGA_COLOR_DARK_GREY));
+    terminal_writestring_pos("select color: alt + [0-9] | switch screen: alt + tab", 14, START_LINE-1);
 }
 
 void _refresh_text_zone(int screen_no) {
@@ -77,11 +79,13 @@ void _print_log_line(int index) {
     }
 
     // Print tick
-
-    for (int i = 0; i < 10; i++) {
-        // TODO print the actual tick
+    terminal_setcolor(log_color);
+    int tick_len = numlen(logs[index].tick);
+    int zero_len = 10 - tick_len;
+    for (int i = 0; i < zero_len; i++) {
         terminal_putentryat('0', log_color, i, line_row);
     }
+    ft_putnbr_pos(logs[index].tick, zero_len, line_row);
     terminal_putentryat(' ', log_color, 10, line_row);
 
     // Print level
@@ -99,6 +103,12 @@ void _print_log_line(int index) {
 }
 
 void refresh_logs() {
+    for (int y = END_LINE+1; y < VGA_HEIGHT; y++) {
+        for (int x = 0; x < VGA_WIDTH; x++) {
+            terminal_putentryat(' ', vga_entry_color(VGA_COLOR_BLACK, VGA_COLOR_BLACK), x, y);
+        }
+    }
+
     // draw separator
     for (int x = 0; x < VGA_WIDTH; x++) {
         terminal_putentryat(' ',
