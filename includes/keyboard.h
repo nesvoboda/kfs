@@ -2,6 +2,8 @@
 # define KEYBOARD_H
 
 # include "config.h"
+# include "direction.h"
+# include "screen_handler.h"
 
 const unsigned char kbdus[128] =
 {

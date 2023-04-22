@@ -3,6 +3,7 @@
 #include "idt.h"
 #include "cursor.h"
 #include "screen_handler.h"
+#include "ft_printf.h"
 // #include "timer.h"                                         
 
 
@@ -34,11 +35,14 @@ void kernel_main(void)
 		terminal_writestring(intro_text[i]);
     }
 	enable_cursor(0, 15);
-	// sleep(5);
+	sleep(5);
 	for (i = 0; i < 10; i++)
 	{
 		update_cursor(320 + i);
 	}
+	init_logs();
 	// Needed for screen handler
 	init_screen();
+	printk(INFO, "System initialized");
+	printk(ERROR, "Test error");
 }

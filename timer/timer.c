@@ -1,5 +1,3 @@
-// timer.c -- Initialises the PIT, and handles clock updates.
-// Written for JamesM's kernel development tutorials.
 #define IRQ0 32
 
 #include "timer.h"
@@ -13,6 +11,10 @@ static void timer_callback(registers_t regs)
     {
         tick = 1;
     }
+}
+
+u32int gettick() {
+    return tick;
 }
 
 

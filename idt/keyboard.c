@@ -1,7 +1,4 @@
-#include "idt.h"
-#include "direction.h"
 #include "keyboard.h"
-#include "screen_handler.h"
 
 
 void handle_scroll(enum direction dir)

@@ -4,12 +4,7 @@
 # include <stddef.h>
 # include <stdint.h>
 
-# include "utils.h"
-
-
-
-
-            
+# include "utils.h"    
 
 /* Hardware text mode color constants. */
 enum vga_color {

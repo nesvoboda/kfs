@@ -5,12 +5,6 @@ int current_index[SCREEN_MAX];
 
 int current_start_position[SCREEN_MAX];
 
-// The line at which the text display starts
-#define START_LINE 2
-#define END_LINE 15
-#define TEXT_AREA_LINES (END_LINE - START_LINE)
-#define TEXT_AREA_SIZE TEXT_AREA_LINES * VGA_WIDTH
-
 void init_screen() {
     for (int i = 0; i < SCREEN_MAX; i++) {
         current_index[i] = 0;
@@ -69,13 +63,52 @@ void _refresh_text_zone(int screen_no) {
     }
 }
 
-void _refresh_logs(int screen_no) {
+
+void _print_log_line(int index) {
+    uint8_t log_color = vga_entry_color(VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+
+    struct log *logs = get_logs();
+
+    int line_row = END_LINE + index + 1;
+
+    // IF the log is empty, we don't have to print it out
+    if (logs[index].log_level == EMPTY) {
+        return;
+    }
+
+    // Print tick
+
+    for (int i = 0; i < 10; i++) {
+        // TODO print the actual tick
+        terminal_putentryat('0', log_color, i, line_row);
+    }
+    terminal_putentryat(' ', log_color, 10, line_row);
+
+    // Print level
+    if (logs[index].log_level == INFO) {
+        terminal_setcolor(vga_entry_color(VGA_COLOR_WHITE, VGA_COLOR_GREEN));
+        terminal_writestring_pos("INFO", 11, line_row);        
+    } else if (logs[index].log_level == ERROR) {
+        terminal_setcolor(vga_entry_color(VGA_COLOR_WHITE, VGA_COLOR_LIGHT_RED));
+        terminal_writestring_pos("ERR ", 11, line_row);
+    }
+    terminal_putentryat(' ', log_color, 15, line_row);
+    // Print message
+    terminal_setcolor(log_color);
+    terminal_writestring_pos(logs[index].line, 16, line_row);
+}
+
+void refresh_logs() {
+    // draw separator
     for (int x = 0; x < VGA_WIDTH; x++) {
         terminal_putentryat(' ',
             vga_entry_color(
                 VGA_COLOR_DARK_GREY,
                 VGA_COLOR_DARK_GREY
             ), x, END_LINE);
+    }
+    for (int y = 0; y < LOG_LINES; y++) {
+        _print_log_line(y);
     }
 }
 
@@ -92,7 +125,7 @@ void refresh_screen(int screen_no) {
     _refresh_text_zone(screen_no);
     // update logs
 
-    _refresh_logs(screen_no);
+    refresh_logs();
 
 }
 
