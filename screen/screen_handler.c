@@ -5,6 +5,10 @@ int current_index[SCREEN_MAX];
 
 int current_start_position[SCREEN_MAX];
 
+// The line at which the text display starts
+#define START_LINE 2
+#define END_LINE 15
+
 void init_screen() {
     for (int i = 0; i < SCREEN_MAX; i++) {
         current_index[i] = 0;
@@ -16,15 +20,42 @@ int _len_to_print(int screen_no, int start_position) {
     return get_len(screen_no) - start_position;
 }
 
-void refresh_screen(int screen_no) {
-    text_char_t *text = get_text(screen_no);
+static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg) 
+{
+	return fg | bg << 4;
+}
 
+void _refresh_status_zone(int screen_no) {
+    for (int x = 0; x < VGA_WIDTH; x++) {
+        terminal_putentryat('.',
+            vga_entry_color(
+                VGA_COLOR_LIGHT_BLUE,
+                VGA_COLOR_LIGHT_BLUE
+            ), x, 0);
+    }
+    uint8_t text_color = vga_entry_color(VGA_COLOR_WHITE, VGA_COLOR_LIGHT_BLUE);
+    terminal_setcolor(text_color);
+    terminal_writestring_pos("blash os - screen ", 30, 0);
+    terminal_putentryat(screen_no + '0',text_color, 48, 0);
+    for (int y = 1; y < START_LINE; y++) {
+        for (int x = 0; x < VGA_WIDTH; x++) {
+            terminal_putentryat('.',
+                vga_entry_color(
+                    VGA_COLOR_DARK_GREY,
+                    VGA_COLOR_DARK_GREY
+                ), x, y);
+        }
+    }
+}
+
+void _refresh_text_zone(int screen_no) {
+    text_char_t *text = get_text(screen_no);
     // invariant: never too many characters to write
     int start_writing_at = current_start_position[screen_no]; 
 
     int char_position = start_writing_at;
-    update_cursor(current_index[screen_no] - start_writing_at);
-    for (int y = 0; y < VGA_HEIGHT; y++) {
+
+    for (int y = START_LINE; y < END_LINE; y++) {
         for (int x = 0; x < VGA_WIDTH; x++) {
             if (char_position < get_len(screen_no)) {
                 terminal_putentryat(text[char_position].c, text[char_position].color, x, y);
@@ -34,6 +65,33 @@ void refresh_screen(int screen_no) {
             char_position++;
         }
     }
+}
+
+void _refresh_logs(int screen_no) {
+    for (int x = 0; x < VGA_WIDTH; x++) {
+        terminal_putentryat(' ',
+            vga_entry_color(
+                VGA_COLOR_DARK_GREY,
+                VGA_COLOR_DARK_GREY
+            ), x, END_LINE);
+    }
+}
+
+void refresh_screen(int screen_no) {
+    
+
+
+    update_cursor(current_index[screen_no] - current_start_position[screen_no]);
+
+    // update status zone
+    _refresh_status_zone(screen_no);
+
+    // update text zone
+    _refresh_text_zone(screen_no);
+    // update logs
+
+    _refresh_logs(screen_no);
+
 }
 
 void screen_add_char(char c, uint8_t color, int screen_no) {

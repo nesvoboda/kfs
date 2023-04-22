@@ -17,6 +17,8 @@ void disable_cursor()
 
 void update_cursor(uint16_t pos)
 {
+	// add status zone
+	pos += VGA_WIDTH*2;
 	// uint16_t pos = y * VGA_WIDTH + x;
  
 	outb(0x3D4, 0x0F);
