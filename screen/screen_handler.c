@@ -8,6 +8,8 @@ int current_start_position[SCREEN_MAX];
 // The line at which the text display starts
 #define START_LINE 2
 #define END_LINE 15
+#define TEXT_AREA_LINES (END_LINE - START_LINE)
+#define TEXT_AREA_SIZE TEXT_AREA_LINES * VGA_WIDTH
 
 void init_screen() {
     for (int i = 0; i < SCREEN_MAX; i++) {
@@ -109,7 +111,7 @@ void screen_add_char(char c, uint8_t color, int screen_no) {
     current_index[screen_no] += 1;
 
     // If writing causes scroll
-    if (_len_to_print(screen_no, current_start_position[screen_no]) > 2000) {
+    if (_len_to_print(screen_no, current_start_position[screen_no]) > TEXT_AREA_SIZE) {
         current_start_position[screen_no] += 80;
     }
 
@@ -128,7 +130,7 @@ void screen_erase(int screen_no) {
     // If erasing causes scroll
     if (_len_to_print(screen_no, current_start_position[screen_no]) < 1) {
         // Go back one whole screen
-        current_start_position[screen_no] -= 2000;
+        current_start_position[screen_no] -= TEXT_AREA_SIZE;
 
         //Reset to 0 if it goes below 0
         if (current_start_position[screen_no] < 0) {
@@ -150,7 +152,7 @@ void _scroll_left(int screen_no) {
 
     if (current_index[screen_no] <= current_start_position[screen_no]) {
         // Go back one whole screen
-        current_start_position[screen_no] -= 2000;
+        current_start_position[screen_no] -= TEXT_AREA_SIZE;
 
         //Reset to 0 if it goes below 0
         if (current_start_position[screen_no] < 0) {
@@ -168,7 +170,7 @@ void _scroll_right(int screen_no) {
     current_index[screen_no] += 1;
     // TODO cursor?
 
-    if (current_index[screen_no] >= current_start_position[screen_no] + 2000) {
+    if (current_index[screen_no] >= current_start_position[screen_no] + TEXT_AREA_SIZE) {
         current_start_position[screen_no] += 80;
     }
 }
@@ -183,7 +185,7 @@ void _scroll_up(int screen_no) {
 
     if (current_index[screen_no] <= current_start_position[screen_no]) {
         // Go back one whole screen
-        current_start_position[screen_no] -= 2000;
+        current_start_position[screen_no] -= TEXT_AREA_SIZE;
 
         //Reset to 0 if it goes below 0
         if (current_start_position[screen_no] < 0) {
@@ -202,7 +204,7 @@ void _scroll_down(int screen_no) {
 
     // TODO cursor?
 
-    if (current_index[screen_no] >= current_start_position[screen_no] + 2000) {
+    if (current_index[screen_no] >= current_start_position[screen_no] + TEXT_AREA_SIZE) {
         current_start_position[screen_no] += 80;
     }
 }
