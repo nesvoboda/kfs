@@ -1,4 +1,5 @@
 #include "screen_handler.h"
+#include "cursor.h"
 
 int current_index[SCREEN_MAX];
 
@@ -22,13 +23,13 @@ void refresh_screen(int screen_no) {
     int start_writing_at = current_start_position[screen_no]; 
 
     int char_position = start_writing_at;
-
+    update_cursor(current_index[screen_no] - start_writing_at);
     for (int y = 0; y < VGA_HEIGHT; y++) {
         for (int x = 0; x < VGA_WIDTH; x++) {
             if (char_position < get_len(screen_no)) {
                 terminal_putentryat(text[char_position].c, text[char_position].color, x, y);
             } else {
-                terminal_putentryat(' ', 0, x, y);
+                terminal_putentryat(' ',  text[get_len(screen_no) - 1].color, x, y);
             }
             char_position++;
         }
@@ -100,9 +101,9 @@ void _scroll_left(int screen_no) {
     }
 }
 
-/// abc
+/// abc len 3 
 void _scroll_right(int screen_no) {
-    if (current_index[screen_no] >= (get_len(screen_no))) {
+    if (current_index[screen_no] >= get_len(screen_no)) {
         return;
     }
 
@@ -115,7 +116,7 @@ void _scroll_right(int screen_no) {
 }
 
 void _scroll_up(int screen_no) {
-    if (current_index[screen_no] <= 80) {
+    if (current_index[screen_no] < 80) {
         return;
     }
 

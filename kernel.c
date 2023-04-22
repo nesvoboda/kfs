@@ -1,7 +1,7 @@
 #include "screen.h"
 #include "gdt.h"
 #include "idt.h"
- 
+#include "cursor.h"
 #include "screen_handler.h"
 
 void kernel_main(void) 
@@ -16,7 +16,7 @@ void kernel_main(void)
 	init_timer(1);
 
 	terminal_writestring("42");
-
+	enable_cursor(0, 15);
 	// Test interrupt
 	asm volatile ("int $0x3");
 
