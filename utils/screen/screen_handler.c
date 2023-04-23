@@ -65,6 +65,7 @@ void _refresh_text_zone(int screen_no) {
     }
 }
 
+
 void _print_log_line(int index) {
     uint8_t log_color = vga_entry_color(VGA_COLOR_WHITE, VGA_COLOR_BLACK);
 
@@ -122,6 +123,9 @@ void refresh_logs() {
 }
 
 void refresh_screen(int screen_no) {
+    
+
+
     update_cursor(current_index[screen_no] - current_start_position[screen_no]);
 
     // update status zone
@@ -129,9 +133,10 @@ void refresh_screen(int screen_no) {
 
     // update text zone
     _refresh_text_zone(screen_no);
-
     // update logs
+
     refresh_logs();
+
 }
 
 void screen_add_char(char c, uint8_t color, int screen_no) {
@@ -186,6 +191,7 @@ void _scroll_left(int screen_no) {
     }
 
     current_index[screen_no] -= 1;
+    // TODO cursor?
 
     if (current_index[screen_no] <= current_start_position[screen_no]) {
         // Go back one whole screen
@@ -198,12 +204,14 @@ void _scroll_left(int screen_no) {
     }
 }
 
+/// abc len 3 
 void _scroll_right(int screen_no) {
     if (current_index[screen_no] >= get_len(screen_no)) {
         return;
     }
 
     current_index[screen_no] += 1;
+    // TODO cursor?
 
     if (current_index[screen_no] >= current_start_position[screen_no] + TEXT_AREA_SIZE) {
         current_start_position[screen_no] += 80;
@@ -216,6 +224,7 @@ void _scroll_up(int screen_no) {
     }
 
     current_index[screen_no] -= 80;
+    // TODO cursor?
 
     if (current_index[screen_no] <= current_start_position[screen_no]) {
         // Go back one whole screen
@@ -234,7 +243,10 @@ void _scroll_down(int screen_no) {
     } else {
         current_index[screen_no] += 80;
     }
-    
+
+
+    // TODO cursor?
+
     if (current_index[screen_no] >= current_start_position[screen_no] + TEXT_AREA_SIZE) {
         current_start_position[screen_no] += 80;
     }

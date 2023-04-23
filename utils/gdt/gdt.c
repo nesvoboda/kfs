@@ -27,6 +27,7 @@ struct gdt_ptr gp;
 *  reload the new segment registers */
 extern void gdt_flush();
 
+
 /* Setup a descriptor in the Global Descriptor Table */
 void gdt_set_gate(int num, unsigned long base, unsigned long limit,
                            unsigned char access, unsigned char gran)
@@ -54,7 +55,7 @@ void gdt_install()
 {
     /* Setup the GDT pointer and limit */
     gp.limit = (sizeof(struct gdt_entry) * 3) - 1;
-    gp.base = (unsigned int)&gdt;
+    gp.base = &gdt;
 
     /* Our NULL descriptor */
     gdt_set_gate(0, 0, 0, 0, 0);

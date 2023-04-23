@@ -1,5 +1,6 @@
 #include "keyboard.h"
 
+
 void handle_scroll(enum direction dir)
 {
     screen_handle_scroll(dir, current_screen);
@@ -30,11 +31,13 @@ void add_char(char c)
 
 void keyboard_handler(registers_t regs)
 {
+  
 	char scancode;
 	scancode = inb(KBD_DATA_REG);
 
   if ((scancode & KBD_STATUS_MASK) == 0)
   {
+
     if (keyboard_flags.arrow_flag && scancode == UP_PRESSED)
       handle_scroll(TOP);
     else if (keyboard_flags.arrow_flag && scancode == BOTTOM_PRESSED)
@@ -53,10 +56,11 @@ void keyboard_handler(registers_t regs)
       erase();
     else if (scancode != ARROW && scancode != LEFT_PRESSED  && scancode != BOTTOM_PRESSED  && scancode != UP_PRESSED  && scancode != RIGHT_PRESSED) {
       char c = kbdus[scancode & KBD_SCANCODE_MASK];
-      if (c >= 32 & c <= 127) {
+      if (c > 32 & c <= 127) {
         add_char(c);
       }
     }
+      
   }
   else   
   {

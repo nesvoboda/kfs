@@ -18,7 +18,7 @@ void	ptnbr(int n, int *ret)
 
 	if (n < 0)
 	{
-		nbr = (n == -2147483648) ? 2147483647 : -n;
+		nbr = (n == -2147483648) ? 2147483648 : -n;
 	}
 	else
 		nbr = n;

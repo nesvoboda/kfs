@@ -1,5 +1,8 @@
 #include "text_handler.h"
 
+// #define SCREEN_MAX 5
+
+
 #define MAX_TEXT 3000
 
 typedef struct text_buffer {
@@ -11,9 +14,18 @@ text_buffer_t buffers[SCREEN_MAX];
 
 void init_text_handler() {
     for (int i = 0; i < SCREEN_MAX; i++) {
+        // memset(buffers[i].buf, 0, MAX_TEXT);
         buffers[i].len = 0;
     }
 }
+
+// abc
+// insert 'x' at index 1
+// axbc
+
+
+// abbc
+
 
 void _move_everything_forward(int at_index, int screen_no)
 {
@@ -27,6 +39,12 @@ void _move_everything_forward(int at_index, int screen_no)
         save = second_save;
     }
 }
+
+// abc
+// ac
+
+// abcd
+// acdd
 
 void _move_everything_back(int at_index, int screen_no)
 {
@@ -48,6 +66,11 @@ int insert_character(text_char_t c, int index, int screen_no) {
     buffers[screen_no].len += 1;
     return 0;
 }
+
+// abc
+// erase at 1
+// ac
+
 
 int remove_character(int index, int screen_no)
 {

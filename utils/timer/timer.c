@@ -7,11 +7,14 @@ u32int tick = 1;
 static void timer_callback(registers_t regs)
 {
    tick++;
+//    ft_putnbr_classic(tick);
+//    terminal_writestring("..");
 }
 
 u32int gettick() {
     return tick;
 }
+
 
 void sleep(u32int time)
 {
@@ -19,6 +22,7 @@ void sleep(u32int time)
     while (time > (tick - time_start))
     {
         asm("hlt");
+        // terminal_writestring("sleep");
     }
 }
 

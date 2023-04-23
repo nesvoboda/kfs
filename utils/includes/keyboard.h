@@ -45,9 +45,9 @@ const unsigned char kbdus[128] =
     0,	/* All other keys are undefined */
 };
 
-# define KBD_DATA_REG        0x60    /* I/O port for keyboard data */
-# define KBD_SCANCODE_MASK   0x7f
-# define KBD_STATUS_MASK     0x80
+#define KBD_DATA_REG        0x60    /* I/O port for keyboard data */
+#define KBD_SCANCODE_MASK   0x7f
+#define KBD_STATUS_MASK     0x80
 
 enum special_char {
   TAB = 15,

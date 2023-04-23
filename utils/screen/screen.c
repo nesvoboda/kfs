@@ -9,25 +9,73 @@ static inline uint16_t vga_entry(unsigned char uc, uint8_t color)
 {
 	return (uint16_t) uc | (uint16_t) color << 8;
 }
+
+
  
 size_t terminal_row;
 size_t terminal_column;
 uint8_t terminal_color;
+uint8_t terminal_color1;
+uint8_t terminal_color2;
+
 uint16_t* terminal_buffer;
+uint16_t* first_terminal_buffer;
+uint16_t* second_terminal_buffer;
+// typedef struct screen
+// {
+// 	size_t terminal_rows;
+// 	size_t terminal_columns;
+// 	uint8_t terminal_colors;
+// 	uint16_t* terminal_buffers;
+// 	struct screen *next;
+// 	struct screen *prev;           // The upper 16 bits of the address to jump to.
+// } screen_t;
 
 void terminal_initialize(void) 
 {
 	terminal_row = 0;
 	terminal_column = 0;
 	terminal_color = vga_entry_color(VGA_COLOR_LIGHT_GREEN, VGA_COLOR_BLACK);
-	terminal_buffer = (uint16_t*) 0xB8000;
+	terminal_color1 = vga_entry_color(VGA_COLOR_LIGHT_RED, VGA_COLOR_BLACK);
+	terminal_color2 = vga_entry_color(VGA_COLOR_LIGHT_GREEN, VGA_COLOR_BLACK);
 
+	terminal_buffer = (uint16_t*) 0xB8000;
 	for (size_t y = 0; y < VGA_HEIGHT; y++) {
 		for (size_t x = 0; x < VGA_WIDTH; x++) {
 			const size_t index = y * VGA_WIDTH + x;
-			terminal_buffer[index] = vga_entry(' ', terminal_color);
+			terminal_buffer[index] = vga_entry(' ', terminal_color1);
+			first_terminal_buffer[index] = vga_entry(' ', terminal_color1);
+			second_terminal_buffer[index] = vga_entry(' ', terminal_color2);
+
 		}
 	}
+
+}
+ 
+void switch_to_first_terminal_buffer(void)
+{
+	for (size_t y = 0; y < VGA_HEIGHT; y++) {
+		for (size_t x = 0; x < VGA_WIDTH; x++) {
+			const size_t index = y * VGA_WIDTH + x;
+			second_terminal_buffer[index] = terminal_buffer[index];
+			terminal_buffer[index] = first_terminal_buffer[index];
+
+		}
+	}
+ 	terminal_color = terminal_color1;
+
+}
+
+void switch_to_second_terminal_buffer(void)
+{
+	for (size_t y = 0; y < VGA_HEIGHT; y++) {
+		for (size_t x = 0; x < VGA_WIDTH; x++) {
+			const size_t index = y * VGA_WIDTH + x;
+			first_terminal_buffer[index] = terminal_buffer[index];
+			terminal_buffer[index] = second_terminal_buffer[index];
+		}
+	}
+	terminal_color = terminal_color2;
 }
 
 void terminal_setcolor(uint8_t color) 
@@ -115,4 +163,26 @@ int numlen(int n)
 		i++;
 	}
 	return i;
+}
+
+void	ft_putnbr_classic(int n)
+{
+	int nbr;
+
+	if (n < 0)
+	{
+		terminal_putchar('-');
+		nbr = (n == -2147483648) ? 2147483647 : -n;
+	}
+	else
+		nbr = n;
+	if (nbr > 9)
+	{
+		ft_putnbr(nbr / 10);
+		ft_putnbr(nbr % 10);
+	}
+	if (nbr <= 9)
+	{
+		terminal_putchar(nbr + '0');
+	}
 }

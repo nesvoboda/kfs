@@ -18,10 +18,9 @@ typedef struct registers
    u32int eip, cs, eflags, useresp, ss; // Pushed by the processor automatically.
 } registers_t;
 
-typedef void (*isr_t)(registers_t);
 void init_idt();
 uint8_t inb(uint16_t port);
-void register_interrupt_handler(u8int n, isr_t handler);
+
 void outb(uint16_t port, uint8_t val);
 void init_timer(u32int frequency);
 void keyboard_handler(registers_t regs);

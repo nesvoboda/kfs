@@ -19,7 +19,6 @@ struct idt_ptr_struct
    u16int limit;
    u32int base;                // The address of the first element in our idt_entry_t array.
 } __attribute__((packed));
-
 typedef struct idt_ptr_struct idt_ptr_t;
 extern void idt_flush(u32int);
 static void idt_set_gate(u8int,u32int,u16int,u8int);
@@ -60,6 +59,7 @@ extern void isr29 ();
 extern void isr30 ();
 extern void isr31 ();
 
+
 extern void irq0 ();
 extern void irq1 ();
 extern void irq2 ();
@@ -76,7 +76,6 @@ extern void irq12 ();
 extern void irq13 ();
 extern void irq14 ();
 extern void irq15 ();
-
 #define ICW1_ICW4	0x01		/* Indicates that ICW4 will be present */
 #define ICW1_SINGLE	0x02		/* Single (cascade) mode */
 #define ICW1_INTERVAL4	0x04		/* Call address interval 4 (8) */
@@ -97,10 +96,25 @@ extern void irq15 ();
 #define PIC2_DATA (PIC2+1)
 
 
+#define PIC_EOI		0x20		/* End-of-interrupt command code */
+ 
+void PIC_sendEOI(unsigned char irq)
+{
+	if(irq >= 8)
+		outb(PIC2_COMMAND,PIC_EOI);
+ 
+	outb(PIC1_COMMAND,PIC_EOI);
+}
+
+/*Receives value from I/O location*/
+
 static inline void io_wait(void)
 {
     outb(0x80, 0);
 }
+/* reinitialize the PIC controllers, giving them specified vector offsets
+   rather than 8h and 70h, as configured by default */
+ 
 
 // A few defines to make life a little easier
 #define IRQ0 32
@@ -120,12 +134,23 @@ static inline void io_wait(void)
 #define IRQ14 46
 #define IRQ15 47
 
+
+typedef void (*isr_t)(registers_t);
+
 isr_t interrupt_handlers[256];
 
 void register_interrupt_handler(u8int n, isr_t handler)
 {
+
   interrupt_handlers[n] = handler;
 }
+/*
+arguments:
+	offset1 - vector offset for master PIC
+		vectors on the master become offset1..offset1+7
+	offset2 - same for slave PIC: offset2..offset2+7
+*/
+
 
 uint8_t inb(uint16_t port)
 {
@@ -142,14 +167,13 @@ void outb(uint16_t port, uint8_t val)
 	asm volatile( "outb %0, %1" : : "a"(val), "Nd"(port) );
 }
 
-/*
-arguments:
-	offset1 - vector offset for master PIC
-		vectors on the master become offset1..offset1+7
-	offset2 - same for slave PIC: offset2..offset2+7
-*/
 void PIC_remap(int offset1, int offset2)
 {
+	// unsigned char a1, a2;
+ 
+	// a1 = inb(PIC1_DATA);                        // save masks
+	// a2 = inb(PIC2_DATA);
+ 
 	outb(PIC1_COMMAND, ICW1_INIT | ICW1_ICW4);  // starts the initialization sequence (in cascade mode)
 	io_wait();
 	outb(PIC2_COMMAND, ICW1_INIT | ICW1_ICW4);
@@ -171,6 +195,8 @@ void PIC_remap(int offset1, int offset2)
 	outb(PIC1_DATA, 0x0);   // restore saved masks.
 	outb(PIC2_DATA, 0x0);
 }
+
+
 
 void init_idt()
 {
@@ -215,6 +241,8 @@ void init_idt()
    idt_set_gate(30, (u32int)isr30, 0x08, 0x8E);
    idt_set_gate(31, (u32int)isr31, 0x08, 0x8E);
 
+   // PIC_remap(0x20, 0x28);   
+
    idt_set_gate(32, (u32int)irq0, 0x08, 0x8E);
    idt_set_gate(33, (u32int)irq1, 0x08, 0x8E);
    idt_set_gate(34, (u32int)irq2, 0x08, 0x8E);
@@ -232,6 +260,7 @@ void init_idt()
    idt_set_gate(46, (u32int)irq14, 0x08, 0x8E);
    idt_set_gate(47, (u32int)irq15, 0x08, 0x8E);
    register_interrupt_handler(IRQ1, &keyboard_handler);
+   // init_timer(50);
    idt_flush((u32int)&idt_ptr);
 
 }
@@ -255,11 +284,11 @@ void irq_handler(registers_t regs)
        handler(regs);
    }
 }
-
 static void idt_set_gate(u8int num, u32int base, u16int sel, u8int flags)
 {
    idt_entries[num].base_lo = base & 0xFFFF;
    idt_entries[num].base_hi = (base >> 16) & 0xFFFF;
+
    idt_entries[num].sel     = sel;
    idt_entries[num].always0 = 0;
    // We must uncomment the OR below when we get to using user-mode.
