@@ -35,6 +35,9 @@ void write_log(char c) {
 
 // end_log closes the log line
 void end_log() {
+
     current_log_line += 1;
+    if (current_log_line % 9 == 0)
+        current_log_line = 0;
     line_position = 0;
 }
