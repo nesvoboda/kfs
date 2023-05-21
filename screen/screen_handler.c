@@ -2,7 +2,6 @@
 #include "cursor.h"
 
 int current_index;
-
 int current_start_position;
 
 void init_screen() {
@@ -11,7 +10,18 @@ void init_screen() {
 }
 
 int _len_to_print(int start_position) {
-    return get_len() - start_position;
+    text_char_t *text = get_text();
+    int count = 0;
+    for (int i = start_position; i < get_len(); i++)
+    {
+        if (text[i].c == '\n') {
+            int pos_in_line = count % VGA_WIDTH;
+            count += VGA_WIDTH - pos_in_line;       
+        } else {
+            count += 1;
+        }
+    }
+    return count;
 }
 
 static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg) 
@@ -49,16 +59,23 @@ void _refresh_text_zone() {
     // invariant: never too many characters to write
     int start_writing_at = current_start_position; 
 
-    int char_position = start_writing_at;
+    int index = start_writing_at;
 
     for (int y = START_LINE; y < END_LINE; y++) {
         for (int x = 0; x < VGA_WIDTH; x++) {
-            if (char_position < get_len()) {
-                terminal_putentryat(text[char_position].c, text[char_position].color, x, y);
+            if (index < get_len()) {
+                if (text[index].c == '\n') {
+                    // fill the line
+                    while (x < VGA_WIDTH) {
+                        terminal_putentryat(' ', text[index].color, x, y);
+                        x++;
+                    }
+                }
+                terminal_putentryat(text[index].c, text[index].color, x, y);
             } else {
                 terminal_putentryat(' ',  text[get_len() - 1].color, x, y);
             }
-            char_position++;
+            index++;
         }
     }
 }
@@ -119,8 +136,24 @@ void refresh_logs() {
     }
 }
 
+
+int cursor_location() {
+    text_char_t *text = get_text();
+    int count = 0;
+    for (int i = current_start_position; i < current_index; i++)
+    {
+        if (text[i].c == '\n') {
+            int pos_in_line = count % VGA_WIDTH;
+            count += VGA_WIDTH - pos_in_line;       
+        } else {
+            count += 1;
+        }
+    }
+    return count;
+}
+
 void refresh_screen() {
-    update_cursor(current_index - current_start_position);
+    update_cursor(cursor_location());
 
     // update status zone
     _refresh_status_zone();

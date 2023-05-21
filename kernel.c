@@ -5,6 +5,7 @@
 #include "screen_handler.h"
 #include "ft_printf.h"
 #include "stack.h"
+#include "shell.h"
                                         
 static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg) 
 {
@@ -58,7 +59,8 @@ void kernel_main(void)
 	printk(INFO, "System initialized");
 	sleep(2*50);
 	printk(ERROR, "Test error");
-	write(1, "Hello world!", 12);
-	TraceStackTrace(16);
 
+	// TraceStackTrace(16);
+
+	shell();
 }

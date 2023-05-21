@@ -1,17 +1,29 @@
+#include "shell.h"
+
+char line[100];
+
+void flush_line() {
+    for (int i = 0; i < 100; i++)
+    {
+        line[i] = '\0';
+    }
+}
+
 void shell()
 {
     char *line;
     char buf;
     while(1)
     {
-        buf = read(0, 1);
-        if (buf == '\n')
+        write(1, "> ", 2);
+        flush_line();
+        int ret = read(0, line, 99);
+        
+        if (!ft_strncmp(line, "kek", 3))
         {
-            if (!strcmp(line, "exec"))
-            {
-                printf("kek");
-            }   
-            line = "";
+            write(1, "kek\n", 4);
+        } else {
+            write(1, "Unknown command\n", 16);
         }
     }
 
