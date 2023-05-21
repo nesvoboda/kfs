@@ -58,4 +58,5 @@ void kernel_main(void)
 	printk(INFO, "System initialized");
 	sleep(2*50);
 	printk(ERROR, "Test error");
+	write(1, "Hello world!", 12);
 }

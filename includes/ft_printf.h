@@ -19,6 +19,7 @@
 
 # include "logs.h"
 # include "screen_handler.h"
+# include "unistd.h"
 
 typedef struct	s_info
 {

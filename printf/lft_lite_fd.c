@@ -12,25 +12,9 @@
 
 #include "ft_printf.h"
 
-enum DESCRIPTORS {
-	KERNEL = 1,
-};
-
-void write(int fd, char *c, int len) {
-	if (fd == KERNEL) {
-		for (int i = 0; i < len; i++) {
-			write_log(c[i]);
-		}
-	}
-	else {
-		// We can only write() to logs now...
-		return;
-	}
-}
-
 void	ft_putchar_fd(char c, int fd)
 {
-	write(fd, &c, 1);
+	write(fd, &c, fd);
 }
 
 void	ft_putstr_fd(char *s, int fd)
