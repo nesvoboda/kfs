@@ -11,7 +11,7 @@ OBJS = $(src_files:.c=.o)
 
 all: myos.iso
 # Note: PHONY is important here. Without it, implicit rules will try to build the executable "all", since the prereqs are ".o" files.
-.PHONY: all isobuilder
+.PHONY: all isobuilder qemu fclean re
 
 %.o : %.c
 	clang -c $(CFLAGS) $< -o $@
@@ -30,3 +30,17 @@ myos.iso: isobuilder myos.bin
 
 clean: 
 	rm -rfv *.o */*.o  myos.bin isodir
+
+fclean: 
+	clean
+	rm myos.iso
+
+re:
+	fclean
+	all
+
+qemu: all
+	qemu-system-i386 -cdrom myos.iso
+
+gdb: all
+	qemu-system-i386 -cdrom myos.iso -Ss

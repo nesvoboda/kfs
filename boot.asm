@@ -47,7 +47,7 @@ section .text
 global gdt_flush     ; Allows the C code to link to this
 extern gp            ; Says that '_gp' is in another file
 gdt_flush:
-	lgdt [gp]        ; Load the GDT with our '_gp' which is a special pointer
+	lgdt [gp]        ; Load the GDT. We have written data to 0x800
 	mov ax, 0x10      ; 0x10 is the offset in the GDT to our data segment
 	mov ds, ax
 	mov es, ax
