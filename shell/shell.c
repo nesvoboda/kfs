@@ -1,4 +1,5 @@
 #include "shell.h"
+#include "reboot.h"
 
 char line[100];
 
@@ -7,6 +8,11 @@ void flush_line() {
     {
         line[i] = '\0';
     }
+}
+
+void halt()
+{
+    asm ("hlt");
 }
 
 void shell()
@@ -22,7 +28,13 @@ void shell()
         if (!ft_strncmp(line, "kek", 3))
         {
             write(1, "kek\n", 4);
-        } else {
+        }
+        else if (!ft_strncmp(line, "halt", 4))
+        {
+            reboot();
+        }
+        else
+        {
             write(1, "Unknown command\n", 16);
         }
     }
