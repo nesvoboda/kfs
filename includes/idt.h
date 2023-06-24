@@ -23,6 +23,7 @@ void init_idt();
 uint8_t inb(uint16_t port);
 void register_interrupt_handler(u8int n, isr_t handler);
 void outb(uint16_t port, uint8_t val);
+void outw(uint16_t port, uint16_t val);
 void init_timer(u32int frequency);
 void keyboard_handler(registers_t regs);
 

@@ -12,12 +12,12 @@ void flush_line() {
 
 void halt()
 {
-    asm ("hlt");
+    outw(0x604, 0x2000);
 }
 
 void shell()
 {
-    char *line;
+    // char *line;
     char buf;
     while(1)
     {
@@ -30,6 +30,10 @@ void shell()
             write(1, "kek\n", 4);
         }
         else if (!ft_strncmp(line, "halt", 4))
+        {
+            halt();
+        }
+        else if (!ft_strncmp(line, "reboot", 6))
         {
             reboot();
         }
