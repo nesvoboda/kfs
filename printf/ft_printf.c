@@ -68,35 +68,6 @@ void	format_handler(char *str, va_list kwargs, int *ret, int *i)
 	*i += ft_strlen(flags);
 }
 
-int		printf(const char *str, ...)
-{
-	int		i;
-	int		ret;
-	va_list	kwargs;
-
-	i = 0;
-	ret = 0;
-	if (str == 0)
-		return (0);
-	va_start(kwargs, str);
-	while (str[i])
-	{
-		if (str[i] == '%')
-		{
-			format_handler((char *)str + i, kwargs, &ret, &i);
-			i++;
-		}
-		else
-		{
-			ft_putchar_fd(str[i], 1);
-			i++;
-			ret++;
-		}
-	}
-	va_end(kwargs);
-	return (ret);
-}
-
 int		printk(enum log_level level, const char *str, ...)
 {
 	int		i;

@@ -18,7 +18,7 @@ int	print_pc(t_info info)
 
 	if (!info.minus)
 		i = put_spaces(info.width - 1, info.spacer);
-	ft_putchar_fd('%', 1);
+	ft_putchar_fd('%', KERNEL);
 	if (info.minus)
 		i = put_spaces(info.width - 1, ' ');
 	return (1 + i);
@@ -32,7 +32,7 @@ int	print_char(va_list kwargs, t_info info)
 	c = va_arg(kwargs, int);
 	if (!info.minus)
 		i = put_spaces(info.width - 1, info.spacer);
-	ft_putchar_fd((unsigned char)c, 1);
+	ft_putchar_fd((unsigned char)c, KERNEL);
 	if (info.minus)
 		i = put_spaces(info.width - 1, info.spacer);
 	return (1 + i);

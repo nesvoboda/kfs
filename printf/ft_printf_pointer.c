@@ -24,7 +24,7 @@ void	ptptr(unsigned long long int nbr, int *ret)
 	}
 	if (nbr <= 15)
 	{
-		ft_putchar_fd(base[nbr], 1);
+		ft_putchar_fd(base[nbr], KERNEL);
 		*ret += 1;
 	}
 }
