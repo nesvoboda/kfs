@@ -23,9 +23,29 @@ const char * intro_text[] = {
 "                                                                  ",
 };
 
+extern uint32_t multiboot_magic;
+extern uint32_t multiboot_info;
+
+void get_multiboot_info() {
+	// int multiboot_magic;
+	// int multiboot_info;
+
+	if (multiboot_magic == 0x2BADB002) {
+		printk(INFO, "Eax has the correct value");
+		uint32_t *flags = multiboot_info;
+		uint32_t elf_enabled = 1 << 5;
+		printk(INFO, "Flags: 0x%x", *flags);
+		printk(INFO, "Elf is enabled: %d", (*flags) & elf_enabled);
+	} else {
+		printk(ERROR, "EAX instead has %x", multiboot_magic);
+	}
+	
+}
+
 
 void kernel_main(void) 
 {	
+	
 	gdt_install();
 	init_idt();
 
@@ -57,10 +77,14 @@ void kernel_main(void)
 	refresh_screen(0);
 	enable_cursor(0, 15);
 	printk(INFO, "System initialized");
+	get_multiboot_info();
 	sleep(2*50);
 	printk(ERROR, "Test error");
+	printk(ERROR, "Test %xerror", 15);
 
-	// TraceStackTrace(16);
+	TraceStackTrace(16);
 
 	shell();
 }
+
+

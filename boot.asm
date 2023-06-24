@@ -32,7 +32,16 @@ align 16
 stack_bottom:
 resb 16384 ; 16 KiB
 stack_top:
- 
+
+global multiboot_info 
+global multiboot_magic 
+
+; Allocate some space for info passed by multiboot
+section .data  
+  multiboot_info:   dd   0           
+  multiboot_magic:  dd    0 
+
+
 ; The linker script specifies _start as the entry point to the kernel and the
 ; bootloader will jump to this position once the kernel has been loaded. It
 ; doesn't make sense to return from this function as the bootloader is gone.
@@ -59,6 +68,8 @@ flush2:
 	ret               ; Returns back to the C code!
 
 global idt_flush   ; Declare the symbol as globally visible
+
+
 
 idt_flush:
     mov eax, [esp+4] ; Get the pointer to the IDT, passed as a parameter
@@ -213,7 +224,6 @@ irq_common_stub:
    iret           ; pops 5 things at once: CS, EIP, EFLAGS, SS, and ESP
 
 
-
 global _start:function (_start.end - _start)
 _start:
 	; The bootloader has loaded us into 32-bit protected mode on a x86
@@ -240,6 +250,8 @@ _start:
 	; yet. The GDT should be loaded here. Paging should be enabled here.
 	; C++ features such as global constructors and exceptions will require
 	; runtime support to work as well.
+    mov [multiboot_info], ebx
+    mov [multiboot_magic], eax
 
 	cli
 	; Enter the high-level kernel. The ABI requires the stack is 16-byte
