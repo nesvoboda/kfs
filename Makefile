@@ -31,8 +31,7 @@ myos.iso: isobuilder myos.bin
 clean: 
 	rm -rfv *.o */*.o  myos.bin isodir
 
-fclean: 
-	clean
+fclean: clean
 	rm myos.iso
 
 re:
@@ -43,4 +42,5 @@ qemu: all
 	qemu-system-i386 -cdrom myos.iso
 
 gdb: all
-	qemu-system-i386 -cdrom myos.iso -Ss
+	qemu-system-i386 -cdrom myos.iso -S -s &
+	gdb myos.bin --eval-command="target remote localhost:1234" ; killall qemu-system-i386
