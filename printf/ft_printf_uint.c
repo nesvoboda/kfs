@@ -33,7 +33,7 @@ void ptunsigned(unsigned int n, int* ret)
 		ptunsigned(n % 10, ret);
 	}
 	if (n <= 9) {
-		ft_putchar_fd(n + '0', KERNEL);
+		ft_putchar_fd(n + '0', current_fd);
 		(*ret)++;
 	}
 }

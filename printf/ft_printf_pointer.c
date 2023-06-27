@@ -22,7 +22,7 @@ void ptptr(unsigned long long int nbr, int* ret)
 		ptptr(nbr % 16, ret);
 	}
 	if (nbr <= 15) {
-		ft_putchar_fd(base[nbr], KERNEL);
+		ft_putchar_fd(base[nbr], current_fd);
 		*ret += 1;
 	}
 }

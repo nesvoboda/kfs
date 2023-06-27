@@ -25,7 +25,7 @@ void ptnbr(int n, int* ret)
 		ptnbr(nbr % 10, ret);
 	}
 	if (nbr <= 9) {
-		ft_putchar_fd(nbr + '0', KERNEL);
+		ft_putchar_fd(nbr + '0', current_fd);
 		(*ret)++;
 	}
 }
@@ -70,11 +70,11 @@ void print_integer(va_list kwargs, int* ret, t_info info)
 	if (info.precision == 0 && nbr == 0)
 		info.width_spaces += 1;
 	if (nbr < 0 && info.spacer == '0')
-		ft_putchar_fd('-', KERNEL);
+		ft_putchar_fd('-', current_fd);
 	if (!info.minus)
 		*ret += put_spaces(info.width_spaces, info.spacer);
 	if (nbr < 0 && info.spacer != '0')
-		ft_putchar_fd('-', KERNEL);
+		ft_putchar_fd('-', current_fd);
 	if (info.precision > length && info.precision != 0)
 		*ret += put_spaces(info.precision_spaces, '0');
 	if (!(info.precision == 0 && nbr == 0))

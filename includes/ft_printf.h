@@ -52,8 +52,11 @@ int print_char(va_list kwargs, t_info info);
 int print_pc(t_info info);
 void calculate_spaces(t_info* info, int length);
 int printk(enum log_level level, const char* str, ...);
+int printf(const char* str, ...);
 int put_spaces(int n, char spacer);
 void grab_flags(char** s, char* flags);
 int grab_width(char** s, int* it, va_list kwargs);
+
+extern int current_fd;
 
 #endif

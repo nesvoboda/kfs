@@ -39,7 +39,7 @@ void pthex(unsigned int nbr, int* ret, int capital)
 		pthex(nbr % 16, ret, capital);
 	}
 	if (nbr <= 15) {
-		ft_putchar_fd(base[nbr], KERNEL);
+		ft_putchar_fd(base[nbr], current_fd);
 		(*ret)++;
 	}
 }

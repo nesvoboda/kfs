@@ -18,7 +18,7 @@ int put_spaces(int n, char spacer)
 
 	i = 0;
 	while (i < n) {
-		ft_putchar_fd(spacer, KERNEL);
+		ft_putchar_fd(spacer, current_fd);
 		i++;
 	}
 	return (i);

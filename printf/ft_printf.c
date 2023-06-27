@@ -67,6 +67,7 @@ void format_handler(char* str, va_list kwargs, int* ret, int* i)
 
 int printk(enum log_level level, const char* str, ...)
 {
+	current_fd = KERNEL;
 	int i;
 	int ret;
 	va_list kwargs;
@@ -82,7 +83,7 @@ int printk(enum log_level level, const char* str, ...)
 			format_handler((char*)str + i, kwargs, &ret, &i);
 			i++;
 		} else {
-			ft_putchar_fd(str[i], KERNEL);
+			ft_putchar_fd(str[i], current_fd);
 			i++;
 			ret++;
 		}
@@ -90,5 +91,33 @@ int printk(enum log_level level, const char* str, ...)
 	va_end(kwargs);
 	end_log();
 	refresh_logs();
+	return (ret);
+}
+
+int current_fd = -1;
+
+int printf(const char* str, ...)
+{
+	current_fd = STDOUT;
+	int i;
+	int ret;
+	va_list kwargs;
+
+	i = 0;
+	ret = 0;
+	if (str == 0)
+		return (0);
+	va_start(kwargs, str);
+	while (str[i]) {
+		if (str[i] == '%') {
+			format_handler((char*)str + i, kwargs, &ret, &i);
+			i++;
+		} else {
+			ft_putchar_fd(str[i], current_fd);
+			i++;
+			ret++;
+		}
+	}
+	va_end(kwargs);
 	return (ret);
 }
