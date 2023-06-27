@@ -12,7 +12,7 @@
 
 #include "ft_printf.h"
 
-int		conversion(char *str, va_list kwargs, int *ret, t_info info)
+int conversion(char* str, va_list kwargs, int* ret, t_info info)
 {
 	int move;
 
@@ -40,10 +40,10 @@ int		conversion(char *str, va_list kwargs, int *ret, t_info info)
 	return (move);
 }
 
-void	format_handler(char *str, va_list kwargs, int *ret, int *i)
+void format_handler(char* str, va_list kwargs, int* ret, int* i)
 {
-	char	flags[100];
-	t_info	info;
+	char flags[100];
+	t_info info;
 
 	str++;
 	grab_flags(&str, flags);
@@ -51,28 +51,25 @@ void	format_handler(char *str, va_list kwargs, int *ret, int *i)
 	info.width = grab_width(&str, i, kwargs);
 	info.spacer = ft_strchr(info.flags, '0') ? '0' : ' ';
 	info.minus = ft_strchr(info.flags, '-') ? 1 : 0;
-	if (info.width < 0)
-	{
+	if (info.width < 0) {
 		info.width = -info.width;
 		info.minus = 1;
 	}
-	if (*str == '.')
-	{
+	if (*str == '.') {
 		str++;
 		(*i)++;
 		info.precision = grab_width(&(str), i, kwargs);
-	}
-	else
+	} else
 		info.precision = -1;
 	*i += conversion(str, kwargs, ret, info);
 	*i += ft_strlen(flags);
 }
 
-int		printk(enum log_level level, const char *str, ...)
+int printk(enum log_level level, const char* str, ...)
 {
-	int		i;
-	int		ret;
-	va_list	kwargs;
+	int i;
+	int ret;
+	va_list kwargs;
 
 	start_log(level);
 	i = 0;
@@ -80,15 +77,11 @@ int		printk(enum log_level level, const char *str, ...)
 	if (str == 0)
 		return (0);
 	va_start(kwargs, str);
-	while (str[i])
-	{
-		if (str[i] == '%')
-		{
-			format_handler((char *)str + i, kwargs, &ret, &i);
+	while (str[i]) {
+		if (str[i] == '%') {
+			format_handler((char*)str + i, kwargs, &ret, &i);
 			i++;
-		}
-		else
-		{
+		} else {
 			ft_putchar_fd(str[i], KERNEL);
 			i++;
 			ret++;

@@ -1,9 +1,9 @@
 #ifndef SCREEN_H
-# define SCREEN_H
+#define SCREEN_H
 
-# include <stddef.h>
-# include <stdint.h>
-# include "utils.h"    
+#include "utils.h"
+#include <stddef.h>
+#include <stdint.h>
 
 /* Hardware text mode color constants. */
 enum vga_color {
@@ -34,7 +34,7 @@ void terminal_putentryat(char c, uint8_t color, size_t x, size_t y);
 void terminal_putchar(char c);
 void terminal_write(const char* data, size_t size);
 void terminal_writestring(const char* data);
-void terminal_writestring_pos(const char *data, int x, int y);
+void terminal_writestring_pos(const char* data, int x, int y);
 void ft_putnbr(int n);
 void ft_putnbr_pos(int n, int x, int y);
 int numlen(int i);

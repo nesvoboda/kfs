@@ -12,45 +12,42 @@
 
 #include "ft_printf.h"
 
-int		hex_length(unsigned long long int n)
+int hex_length(unsigned long long int n)
 {
 	int i;
 
 	if (n == 0)
 		return (1);
 	i = 0;
-	while (n != 0)
-	{
+	while (n != 0) {
 		n = n / 16;
 		i++;
 	}
 	return (i);
 }
 
-void	pthex(unsigned int nbr, int *ret, int capital)
+void pthex(unsigned int nbr, int* ret, int capital)
 {
-	char			*base;
+	char* base;
 
 	if (capital == 1)
 		base = "0123456789ABCDEF";
 	else
 		base = "0123456789abcdef";
-	if (nbr > 15)
-	{
+	if (nbr > 15) {
 		pthex(nbr / 16, ret, capital);
 		pthex(nbr % 16, ret, capital);
 	}
-	if (nbr <= 15)
-	{
+	if (nbr <= 15) {
 		ft_putchar_fd(base[nbr], KERNEL);
 		(*ret)++;
 	}
 }
 
-void	print_hex(va_list kwargs, int *ret, int capital, t_info info)
+void print_hex(va_list kwargs, int* ret, int capital, t_info info)
 {
-	unsigned int	nbr;
-	int				length;
+	unsigned int nbr;
+	int length;
 
 	nbr = va_arg(kwargs, unsigned int);
 	length = hex_length(nbr);

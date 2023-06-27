@@ -12,30 +12,28 @@
 
 #include "ft_printf.h"
 
-void	ptptr(unsigned long long int nbr, int *ret)
+void ptptr(unsigned long long int nbr, int* ret)
 {
-	char *base;
+	char* base;
 
 	base = "0123456789abcdef";
-	if (nbr > 15)
-	{
+	if (nbr > 15) {
 		ptptr(nbr / 16, ret);
 		ptptr(nbr % 16, ret);
 	}
-	if (nbr <= 15)
-	{
+	if (nbr <= 15) {
 		ft_putchar_fd(base[nbr], KERNEL);
 		*ret += 1;
 	}
 }
 
-void	print_pointer(va_list kwargs, int *ret, t_info info)
+void print_pointer(va_list kwargs, int* ret, t_info info)
 {
-	unsigned long long int	nbr;
-	void					*ptr;
-	int						length;
+	unsigned long long int nbr;
+	void* ptr;
+	int length;
 
-	ptr = va_arg(kwargs, void *);
+	ptr = va_arg(kwargs, void*);
 	nbr = (unsigned long long int)ptr;
 	length = hex_length(nbr) + 2;
 	calculate_spaces(&info, length);

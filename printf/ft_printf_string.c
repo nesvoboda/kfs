@@ -12,22 +12,20 @@
 
 #include "ft_printf.h"
 
-int	print_string(va_list kwargs, t_info info)
+int print_string(va_list kwargs, t_info info)
 {
-	char	*str;
-	int		str_length;
-	int		spaces;
+	char* str;
+	int str_length;
+	int spaces;
 
-	str = va_arg(kwargs, char *);
+	str = va_arg(kwargs, char*);
 	if (str == 0)
 		str = "(null)";
 	str_length = ft_strlen(str);
-	if (info.precision > -1 && info.precision < str_length)
-	{
+	if (info.precision > -1 && info.precision < str_length) {
 		str_length = info.precision;
 		spaces = info.width - info.precision;
-	}
-	else
+	} else
 		spaces = info.width - str_length;
 	if (!info.minus)
 		str_length += put_spaces(spaces, info.spacer);

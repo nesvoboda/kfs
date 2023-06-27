@@ -12,24 +12,23 @@
 
 #include "ft_printf.h"
 
-int		put_spaces(int n, char spacer)
+int put_spaces(int n, char spacer)
 {
 	int i;
 
 	i = 0;
-	while (i < n)
-	{
+	while (i < n) {
 		ft_putchar_fd(spacer, KERNEL);
 		i++;
 	}
 	return (i);
 }
 
-void	grab_flags(char **s, char *flags)
+void grab_flags(char** s, char* flags)
 {
-	int		i;
-	int		y;
-	char	*str;
+	int i;
+	int y;
+	char* str;
 
 	str = *s;
 	i = 0;
@@ -40,20 +39,19 @@ void	grab_flags(char **s, char *flags)
 	*s = str;
 }
 
-int		grab_width(char **s, int *it, va_list kwargs)
+int grab_width(char** s, int* it, va_list kwargs)
 {
-	char	*str;
-	char	number[11];
-	int		i;
-	int		y;
+	char* str;
+	char number[11];
+	int i;
+	int y;
 
 	str = *s;
 	i = 0;
 	y = 0;
 	while (str[i] >= '0' && str[i] <= '9')
 		number[y++] = str[i++];
-	if (str[i] == '*')
-	{
+	if (str[i] == '*') {
 		*it += 1;
 		*s += 1;
 		return (va_arg(kwargs, int));

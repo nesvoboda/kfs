@@ -12,39 +12,36 @@
 
 #include "ft_printf.h"
 
-int		uint_length(unsigned int n)
+int uint_length(unsigned int n)
 {
 	int i;
 
 	i = 0;
 	if (n == 0)
 		return (1);
-	while (n != 0)
-	{
+	while (n != 0) {
 		n = n / 10;
 		i++;
 	}
 	return (i);
 }
 
-void	ptunsigned(unsigned int n, int *ret)
+void ptunsigned(unsigned int n, int* ret)
 {
-	if (n > 9)
-	{
+	if (n > 9) {
 		ptunsigned(n / 10, ret);
 		ptunsigned(n % 10, ret);
 	}
-	if (n <= 9)
-	{
+	if (n <= 9) {
 		ft_putchar_fd(n + '0', KERNEL);
 		(*ret)++;
 	}
 }
 
-void	print_unsigned(va_list kwargs, int *ret, t_info info)
+void print_unsigned(va_list kwargs, int* ret, t_info info)
 {
-	unsigned int	nbr;
-	int				length;
+	unsigned int nbr;
+	int length;
 
 	nbr = va_arg(kwargs, unsigned int);
 	length = uint_length(nbr);

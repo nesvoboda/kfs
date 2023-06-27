@@ -12,44 +12,39 @@
 
 #include "ft_printf.h"
 
-void	ptnbr(int n, int *ret)
+void ptnbr(int n, int* ret)
 {
 	int nbr;
 
-	if (n < 0)
-	{
+	if (n < 0) {
 		nbr = (n == -2147483648) ? 2147483647 : -n;
-	}
-	else
+	} else
 		nbr = n;
-	if (nbr > 9)
-	{
+	if (nbr > 9) {
 		ptnbr(nbr / 10, ret);
 		ptnbr(nbr % 10, ret);
 	}
-	if (nbr <= 9)
-	{
+	if (nbr <= 9) {
 		ft_putchar_fd(nbr + '0', KERNEL);
 		(*ret)++;
 	}
 }
 
-int		int_length(int n)
+int int_length(int n)
 {
 	int i;
 
 	i = 0;
 	if (n == 0)
 		return (1);
-	while (n != 0)
-	{
+	while (n != 0) {
 		n = n / 10;
 		i++;
 	}
 	return (i);
 }
 
-void	calculate_spaces(t_info *info, int length)
+void calculate_spaces(t_info* info, int length)
 {
 	if (info->precision > length)
 		info->precision_spaces = info->precision - length;
@@ -60,16 +55,15 @@ void	calculate_spaces(t_info *info, int length)
 		info->spacer = ' ';
 }
 
-void	print_integer(va_list kwargs, int *ret, t_info info)
+void print_integer(va_list kwargs, int* ret, t_info info)
 {
-	int	nbr;
+	int nbr;
 	int length;
 
 	nbr = va_arg(kwargs, int);
 	length = int_length(nbr);
 	calculate_spaces(&info, length);
-	if (nbr < 0)
-	{
+	if (nbr < 0) {
 		(*ret)++;
 		info.width_spaces -= 1;
 	}

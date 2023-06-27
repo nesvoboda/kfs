@@ -12,12 +12,12 @@
 
 #include "ft_printf.h"
 
-void	ft_putchar_fd(char c, int fd)
+void ft_putchar_fd(char c, int fd)
 {
 	write(fd, &c, 1);
 }
 
-void	ft_putstr_fd(char *s, int fd)
+void ft_putstr_fd(char* s, int fd)
 {
 	if (s != NULL)
 		write(fd, s, ft_strlen(s));

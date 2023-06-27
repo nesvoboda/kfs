@@ -6,8 +6,8 @@
 # include "elf.h"
 
 struct stackframe {
-  struct stackframe* ebp;
-  u32int eip;
+	struct stackframe* ebp;
+	u32int eip;
 };
 
 void backtrace(unsigned int maxFrames);

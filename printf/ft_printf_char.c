@@ -12,7 +12,7 @@
 
 #include "ft_printf.h"
 
-int	print_pc(t_info info)
+int print_pc(t_info info)
 {
 	int i;
 
@@ -24,7 +24,7 @@ int	print_pc(t_info info)
 	return (1 + i);
 }
 
-int	print_char(va_list kwargs, t_info info)
+int print_char(va_list kwargs, t_info info)
 {
 	int c;
 	int i;

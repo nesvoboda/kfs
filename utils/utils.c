@@ -1,6 +1,6 @@
 #include "utils.h"
 
-size_t strlen(const char* str) 
+size_t strlen(const char* str)
 {
 	size_t len = 0;
 	while (str[len])
@@ -8,10 +8,10 @@ size_t strlen(const char* str)
 	return len;
 }
 
-void	*memset(void *b, int c, int len)
+void* memset(void* b, int c, int len)
 {
-	unsigned char	*str;
-	unsigned char	*lim;
+	unsigned char* str;
+	unsigned char* lim;
 
 	str = b;
 	lim = b + len;
@@ -20,12 +20,12 @@ void	*memset(void *b, int c, int len)
 	return (b);
 }
 
-int compatib(int a, int b) {
+int compatib(int a, int b)
+{
 	int diff;
 
 	diff = a - b;
-	if (diff < 0)
-	{
+	if (diff < 0) {
 		return diff;
 	} else if (diff == 0) {
 		return 0;
@@ -34,11 +34,11 @@ int compatib(int a, int b) {
 	}
 }
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+int ft_strncmp(const char* s1, const char* s2, size_t n)
 {
-	size_t			i;
-	unsigned char	*u1;
-	unsigned char	*u2;
+	size_t i;
+	unsigned char* u1;
+	unsigned char* u2;
 
 	u1 = (unsigned char*)s1;
 	u2 = (unsigned char*)s2;
