@@ -57,12 +57,7 @@ void kernel_main(void)
 	refresh_screen(0);
 	enable_cursor(0, 15);
 	printk(INFO, "System initialized");
-<<<<<<< HEAD
 	sleep(2*50);
-=======
-	get_multiboot_info();
-	sleep(2 * 50);
->>>>>>> 2182d9a (Format all files)
 	// printk(ERROR, "Test error");
 	// printk(ERROR, "Test %xerror", 15);
 
