@@ -147,5 +147,6 @@ extern u32int multiboot_info;
                u16int      st_shndx;
            } Elf32_Sym;
 
+char *addr2name(u32int *addr);
 
 #endif

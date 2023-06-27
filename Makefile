@@ -35,8 +35,7 @@ clean:
 fclean: clean
 	rm myos.iso
 
-re:
-	fclean
+re: fclean
 	all
 
 qemu: all

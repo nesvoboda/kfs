@@ -3,6 +3,7 @@
 # include "types.h"
 # include "ft_printf.h"
 # include "logs.h"
+# include "elf.h"
 
 struct stackframe {
   struct stackframe* ebp;

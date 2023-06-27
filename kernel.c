@@ -4,7 +4,6 @@
 #include "cursor.h"
 #include "screen_handler.h"
 #include "ft_printf.h"
-#include "stack.h"
 #include "shell.h"
                                         
 static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg) 
@@ -58,7 +57,6 @@ void kernel_main(void)
 	refresh_screen(0);
 	enable_cursor(0, 15);
 	printk(INFO, "System initialized");
-	get_multiboot_info();
 	sleep(2*50);
 	// printk(ERROR, "Test error");
 	// printk(ERROR, "Test %xerror", 15);

@@ -52,7 +52,7 @@ char *find_name(Elf32_Shdr *shdrs, u32int name_index) {
         }
     }
     // name not found in string tables
-    return NULL;multiboot_info_t *mb_info = (multiboot_info_t *)multiboot_info;
+    return NULL;
 }
 
 char *addr2name(u32int *addr) {
