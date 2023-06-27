@@ -1,5 +1,5 @@
 #include "shell.h"
-#include "reboot.h"
+
 
 char line[100];
 
@@ -26,21 +26,15 @@ void shell()
         int ret = read(0, line, 99);
         
         if (!ft_strncmp(line, "kek", 3))
-        {
             write(1, "kek\n", 4);
-        }
         else if (!ft_strncmp(line, "halt", 4))
-        {
             halt();
-        }
         else if (!ft_strncmp(line, "reboot", 6))
-        {
             reboot();
-        }
+        else if (!ft_strncmp(line, "backtrace", 9))
+            backtrace(15);
         else
-        {
             write(1, "Unknown command\n", 16);
-        }
     }
 
 }
