@@ -59,7 +59,8 @@ void kernel_main(void)
 	// sleep(2 * 50);
 	// printk(ERROR, "Test error");
 	// printk(ERROR, "Test %xerror", 15);
-	printk(INFO, "Test kernel: %d %x %s %p", 42, 42, "lol", "lol");
+	char *test = "test";
+	printk(INFO, "Test kernel: d %d, x %x, s %s , p %p", 42, 42, test, "lol");
 	// printf("Test normal: %d %x %s %p", 42, 42, "lol", "lol");
 
 	shell();

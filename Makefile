@@ -6,7 +6,7 @@ printf/ft_printf_integer.c printf/ft_printf_uint.c printf/ft_printf_char.c print
 printf/ft_printf_format.c logs/logs.c timer/timer.c io/io.c shell/shell.c shell/reboot.c backtrace/backtrace.c \
 elf/elf.c
 
-CFLAGS = -target i386-none-elf -nodefaultlibs  -fno-rtti -fno-stack-protector -fno-exceptions -ffreestanding -fno-builtin -nostdlib -I includes
+CFLAGS = -target i386-none-elf -nodefaultlibs  -fno-rtti -fno-stack-protector -fno-exceptions -ffreestanding -fno-builtin -nostdlib -g -I includes
 
 OBJS = $(src_files:.c=.o)
 

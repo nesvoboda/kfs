@@ -29,7 +29,7 @@ int print_string(va_list kwargs, t_info info)
 		spaces = info.width - str_length;
 	if (!info.minus)
 		str_length += put_spaces(spaces, info.spacer);
-	ft_putstr_fd(str, 1);
+	ft_putstr_fd(str, current_fd);
 	if (info.minus)
 		str_length += put_spaces(spaces, ' ');
 	return (str_length);
