@@ -3,6 +3,8 @@
 
 # include <stddef.h>
 
+
+typedef unsigned long long  u64int;
 typedef unsigned int   u32int;
 typedef          int   s32int;
 typedef unsigned short u16int;
