@@ -167,7 +167,13 @@ extern uint32_t multiboot_info;
                uint16_t      st_shndx;
            } Elf32_Sym;
 
-void get_multiboot_info() {
+// we've got EIP = 42
+// 
+
+
+// 
+
+void get_multiboot_info(uint32_t *func_address) {
 	// int multiboot_magic;
 	// int multiboot_info;
 	// 1050c8
@@ -186,6 +192,7 @@ void get_multiboot_info() {
 
 		Elf32_Shdr *elf_shdrs = (Elf32_Shdr *)decoded_info->u.elf_sec.addr;
 		u32int string_we_are_looking_for = 42;
+    //Cycle through elf ta
 		for (int i =0; i < decoded_info->u.elf_sec.num; i++)
 		{
 			if (elf_shdrs[i].sh_type == SHT_SYMTAB || elf_shdrs[i].sh_type == SHT_STRTAB)
@@ -197,8 +204,9 @@ void get_multiboot_info() {
 
 				for (int k =0; k < elf_shdrs[i].sh_size; k++)
 				{
-					if (symtab[k].st_value == &get_multiboot_info) {
+					if (symtab[k].st_value == func_address) {
 						printk(INFO, "st_shndx: %d", symtab[k].st_shndx);
+
 						string_we_are_looking_for = symtab[k].st_name;
 					}
 				}
@@ -207,7 +215,10 @@ void get_multiboot_info() {
 		printk(INFO, "String we're looking for is index %d", string_we_are_looking_for);
 
 		for (int i = 0; i < decoded_info->u.elf_sec.num; i++) {
-			if (elf_shdrs[i].sh_type == SHT_STRTAB && elf_shdrs[i].sh_addr == 0x1176e0) {
+			if (elf_shdrs[i].sh_type == SHT_STRTAB) {
+        if (elf_shdrs[i].sh_size < string_we_are_looking_for) {
+          continue;
+        }
 				u32int str_addr = elf_shdrs[i].sh_addr + string_we_are_looking_for;
 				printk(INFO, "String is %s", (char *) str_addr);
 
@@ -262,7 +273,6 @@ void kernel_main(void)
 	// printk(ERROR, "Test error");
 	// printk(ERROR, "Test %xerror", 15);
 
-	// TraceStackTrace(16);
 
 	shell();
 }
