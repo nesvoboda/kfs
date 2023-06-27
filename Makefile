@@ -33,10 +33,9 @@ clean:
 	rm -rfv *.o */*.o  myos.bin isodir
 
 fclean: clean
-	rm myos.iso
+	rm -rfv myos.iso
 
-re: fclean
-	all
+re: fclean all
 
 qemu: all
 	qemu-system-i386 -cdrom myos.iso
