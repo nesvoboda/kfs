@@ -23,7 +23,7 @@ Elf32_Shdr* find_symtab(Elf32_Shdr* shdrs)
 
 	for (int i = 0; i < mb_info->u.elf_sec.size; i++) {
 		if (shdrs[i].sh_type == SHT_SYMTAB) {
-			return shdrs[i].sh_addr;
+			return &(shdrs[i]);
 		}
 	}
 
@@ -31,7 +31,7 @@ Elf32_Shdr* find_symtab(Elf32_Shdr* shdrs)
 	return NULL;
 }
 
-u32int find_name_index(Elf32_Shdr* symtab, void* addr)
+u32int find_name_index(Elf32_Shdr* symtab, u32int addr)
 {
 	Elf32_Sym* symbols = symtab->sh_addr;
 

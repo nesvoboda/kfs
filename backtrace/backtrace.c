@@ -7,9 +7,13 @@ void backtrace(unsigned int maxFrames)
 		: "=r"(stk)::);
 	char* name;
 
+	write(1, "Backtrace: (last function first):\n", 34);
+
 	for (unsigned int frame = 0; stk && frame < maxFrames; ++frame) {
-		name = addr2name(*(uint32_t*)(stk->eip - 0x4) + stk->eip);
+		u32int addr = *((uint32_t*)(stk->eip - 0x4)) + stk->eip;
+		name = addr2name(addr);
 		write(1, name, ft_strlen(name));
+		write(1, "\n", 1);
 		stk = stk->ebp;
 	}
 }
