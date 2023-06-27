@@ -47,17 +47,17 @@ char* find_name(Elf32_Shdr* shdrs, u32int name_index)
 {
 	multiboot_info_t* mb_info = (multiboot_info_t*)multiboot_info;
 
-    for (int i = 0; i < mb_info->u.elf_sec.size; i++) {
-        if (shdrs[i].sh_type == SHT_STRTAB) {
-            // string table too small to possibly contain the name in question
-            if (shdrs[i].sh_size < name_index) {
-                continue;
-            }
-            return (char *) shdrs[i].sh_addr + name_index;
-        }
-    }
-    // name not found in string tables
-    return NULL;
+	for (int i = 0; i < mb_info->u.elf_sec.size; i++) {
+		if (shdrs[i].sh_type == SHT_STRTAB) {
+			// string table too small to possibly contain the name in question
+			if (shdrs[i].sh_size < name_index) {
+				continue;
+			}
+			return (char*)shdrs[i].sh_addr + name_index;
+		}
+	}
+	// name not found in string tables
+	return NULL;
 }
 
 char* addr2name(u32int* addr)

@@ -1,9 +1,9 @@
 #ifndef BACKTRACE_H
 #define BACKTRACE_H
-# include "types.h"
-# include "ft_printf.h"
-# include "logs.h"
-# include "elf.h"
+#include "elf.h"
+#include "ft_printf.h"
+#include "logs.h"
+#include "types.h"
 
 struct stackframe {
 	struct stackframe* ebp;
