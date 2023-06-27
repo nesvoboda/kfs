@@ -60,8 +60,8 @@ void kernel_main(void)
 	// printk(ERROR, "Test error");
 	// printk(ERROR, "Test %xerror", 15);
 	char *test = "test";
-	printk(INFO, "Test kernel: d %d, x %x, s %s , p %p", 42, 42, test, "lol");
-	// printf("Test normal: %d %x %s %p", 42, 42, "lol", "lol");
+	printk(INFO, "Test kernel: d %d, x %x, s %s , p %p", 42, 21, test, "lol");
+	printf("Test normal: d %d, x %x, s %s , p %p", 42, 21, test, "lol");
 
 	shell();
 }
