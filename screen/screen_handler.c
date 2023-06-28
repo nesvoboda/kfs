@@ -41,8 +41,7 @@ void _refresh_status_zone()
 	}
 	uint8_t text_color = vga_entry_color(VGA_COLOR_WHITE, VGA_COLOR_LIGHT_BLUE);
 	terminal_setcolor(text_color);
-	terminal_writestring_pos("blashOS - screen ", 30, 0);
-	terminal_putentryat(0 + '0', text_color, 47, 0);
+	terminal_writestring_pos("blashOS", 36, 0);
 	for (int y = 1; y < START_LINE; y++) {
 		for (int x = 0; x < VGA_WIDTH; x++) {
 			terminal_putentryat('.',
@@ -53,8 +52,12 @@ void _refresh_status_zone()
 		}
 	}
 	terminal_setcolor(vga_entry_color(VGA_COLOR_BLACK, VGA_COLOR_DARK_GREY));
-	terminal_writestring_pos("select color: alt + [0-9] | switch screen: alt + tab", 14, START_LINE - 1);
+	terminal_writestring_pos("shell", 37, START_LINE - 1);
 }
+
+// 80
+
+//
 
 void _refresh_text_zone()
 {
@@ -85,7 +88,7 @@ void _refresh_text_zone()
 
 void _print_log_line(int index)
 {
-	uint8_t log_color = vga_entry_color(VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+	uint8_t log_color = vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
 
 	struct log* logs = get_logs();
 
@@ -108,10 +111,10 @@ void _print_log_line(int index)
 
 	// Print level
 	if (logs[index].log_level == INFO) {
-		terminal_setcolor(vga_entry_color(VGA_COLOR_WHITE, VGA_COLOR_GREEN));
+		terminal_setcolor(vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_GREEN));
 		terminal_writestring_pos("INFO", 11, line_row);
 	} else if (logs[index].log_level == ERROR) {
-		terminal_setcolor(vga_entry_color(VGA_COLOR_WHITE, VGA_COLOR_LIGHT_RED));
+		terminal_setcolor(vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_LIGHT_RED));
 		terminal_writestring_pos("ERR ", 11, line_row);
 	}
 	terminal_putentryat(' ', log_color, 15, line_row);
@@ -135,6 +138,8 @@ void refresh_logs()
 				VGA_COLOR_DARK_GREY,
 				VGA_COLOR_DARK_GREY),
 			x, END_LINE);
+		terminal_setcolor(vga_entry_color(VGA_COLOR_BLACK, VGA_COLOR_DARK_GREY));
+		terminal_writestring_pos("kernel logs", 34, END_LINE);
 	}
 	for (int y = 0; y < LOG_LINES; y++) {
 		_print_log_line(y);
@@ -170,7 +175,7 @@ void refresh_screen()
 	refresh_logs();
 }
 
-void screen_add_char(char c, uint8_t color)
+int screen_add_char(char c, uint8_t color)
 {
 	text_char_t new_char;
 	new_char.c = c;
@@ -180,7 +185,7 @@ void screen_add_char(char c, uint8_t color)
 	int res = insert_character(new_char, current_index);
 
 	if (res != 0) {
-		return;
+		return -1;
 	}
 
 	current_index += 1;
@@ -192,6 +197,7 @@ void screen_add_char(char c, uint8_t color)
 
 	// Else
 	refresh_screen();
+	return 0;
 }
 
 void screen_erase()
