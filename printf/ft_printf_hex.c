@@ -44,12 +44,12 @@ void pthex(unsigned int nbr, int* ret, int capital)
 	}
 }
 
-void print_hex(va_list kwargs, int* ret, int capital, t_info info)
+void print_hex(va_list *kwargs, int* ret, int capital, t_info info)
 {
 	unsigned int nbr;
 	int length;
 
-	nbr = va_arg(kwargs, unsigned int);
+	nbr = va_arg(*kwargs, unsigned int);
 	length = hex_length(nbr);
 	calculate_spaces(&info, length);
 	if (info.precision == 0 && nbr == 0)

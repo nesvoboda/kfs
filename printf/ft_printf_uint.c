@@ -38,12 +38,12 @@ void ptunsigned(unsigned int n, int* ret)
 	}
 }
 
-void print_unsigned(va_list kwargs, int* ret, t_info info)
+void print_unsigned(va_list *kwargs, int* ret, t_info info)
 {
 	unsigned int nbr;
 	int length;
 
-	nbr = va_arg(kwargs, unsigned int);
+	nbr = va_arg(*kwargs, unsigned int);
 	length = uint_length(nbr);
 	calculate_spaces(&info, length);
 	if (info.precision == 0 && nbr == 0)

@@ -39,7 +39,7 @@ void grab_flags(char** s, char* flags)
 	*s = str;
 }
 
-int grab_width(char** s, int* it, va_list kwargs)
+int grab_width(char** s, int* it, va_list *kwargs)
 {
 	char* str;
 	char number[11];
@@ -54,7 +54,7 @@ int grab_width(char** s, int* it, va_list kwargs)
 	if (str[i] == '*') {
 		*it += 1;
 		*s += 1;
-		return (va_arg(kwargs, int));
+		return (va_arg(*kwargs, int));
 	}
 	*it += i;
 	*s += i;

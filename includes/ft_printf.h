@@ -49,20 +49,20 @@ char* ft_strchr(const char* s, int c);
 size_t ft_strlen(const char* str);
 
 int hex_length(unsigned long long int n);
-void print_hex(va_list kwargs, int* ret, int capital, t_info info);
+void print_hex(va_list *kwargs, int* ret, int capital, t_info info);
 int put_spaces(int n, char spacer);
-int print_string(va_list kwargs, t_info info);
-void print_pointer(va_list kwargs, int* ret, t_info info);
-void print_integer(va_list kwargs, int* ret, t_info info);
-void print_unsigned(va_list kwargs, int* ret, t_info info);
-int print_char(va_list kwargs, t_info info);
+int print_string(va_list *kwargs, t_info info);
+void print_pointer(va_list *kwargs, int* ret, t_info info);
+void print_integer(va_list *kwargs, int* ret, t_info info);
+void print_unsigned(va_list *kwargs, int* ret, t_info info);
+int print_char(va_list *kwargs, t_info info);
 int print_pc(t_info info);
 void calculate_spaces(t_info* info, int length);
 int printk(enum log_level level, const char* str, ...);
 int printf(const char* str, ...);
 int put_spaces(int n, char spacer);
 void grab_flags(char** s, char* flags);
-int grab_width(char** s, int* it, va_list kwargs);
+int grab_width(char** s, int* it, va_list *kwargs);
 
 extern int current_fd;
 

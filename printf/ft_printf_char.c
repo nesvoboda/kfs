@@ -24,12 +24,12 @@ int print_pc(t_info info)
 	return (1 + i);
 }
 
-int print_char(va_list kwargs, t_info info)
+int print_char(va_list *kwargs, t_info info)
 {
 	int c;
 	int i;
 
-	c = va_arg(kwargs, int);
+	c = va_arg(*kwargs, int);
 	if (!info.minus)
 		i = put_spaces(info.width - 1, info.spacer);
 	ft_putchar_fd((unsigned char)c, current_fd);

@@ -12,13 +12,13 @@
 
 #include "ft_printf.h"
 
-int print_string(va_list kwargs, t_info info)
+int print_string(va_list *kwargs, t_info info)
 {
 	char* str;
 	int str_length;
 	int spaces;
 
-	str = va_arg(kwargs, char*);
+	str = va_arg(*kwargs, char*);
 	if (str == 0)
 		str = "(null)";
 	str_length = ft_strlen(str);

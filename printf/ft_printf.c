@@ -12,7 +12,7 @@
 
 #include "ft_printf.h"
 
-int conversion(char* str, va_list kwargs, int* ret, t_info info)
+int conversion(char* str, va_list *kwargs, int* ret, t_info info)
 {
 	int move;
 
@@ -40,7 +40,7 @@ int conversion(char* str, va_list kwargs, int* ret, t_info info)
 	return (move);
 }
 
-void format_handler(char* str, va_list kwargs, int* ret, int* i)
+void format_handler(char* str, va_list *kwargs, int* ret, int* i)
 {
 	char flags[100];
 	t_info info;
@@ -80,7 +80,7 @@ int printk(enum log_level level, const char* str, ...)
 	va_start(kwargs, str);
 	while (str[i]) {
 		if (str[i] == '%') {
-			format_handler((char*)str + i, kwargs, &ret, &i);
+			format_handler((char*)str + i, &kwargs, &ret, &i);
 			i++;
 		} else {
 			ft_putchar_fd(str[i], current_fd);
@@ -110,7 +110,7 @@ int printf(const char* str, ...)
 	va_start(kwargs, str);
 	while (str[i]) {
 		if (str[i] == '%') {
-			format_handler((char*)str + i, kwargs, &ret, &i);
+			format_handler((char*)str + i, &kwargs, &ret, &i);
 			i++;
 		} else {
 			ft_putchar_fd(str[i], current_fd);
