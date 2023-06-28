@@ -32,12 +32,16 @@ void io_add_char(char c, uint8_t color)
 		read_finished = 1;
 		screen_add_char('\n', color);
 	} else {
+		int ret = screen_add_char(c, color);
+		if (ret != 0) {
+			return;
+		}
 		io_buffer[bytes_read] = c;
 		bytes_read += 1;
 		if (bytes_read >= desired_count) {
 			read_finished = 1;
 		}
-		screen_add_char(c, color);
+		
 	}
 }
 
