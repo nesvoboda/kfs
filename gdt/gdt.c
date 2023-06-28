@@ -122,7 +122,7 @@ void gdt_install()
 
 	u8int kernel_stack_segment_access = VALID_SEGMENT | PRIVILEGE_KERNEL | TYPE_CODE_OR_DATA | EXECUTABLE_NO | DIRECTION_DOWN | RDWR_ALLOW;
 
-	gdt_set_gate(3, 0, 0x0, kernel_stack_segment_access, 0xCF);
+	gdt_set_gate(3, 0, 0xFFFFFFFF, kernel_stack_segment_access, 0xCF);
 
 	u8int user_code_segment_access = VALID_SEGMENT | PRIVILEGE_USER | TYPE_CODE_OR_DATA | EXECUTABLE_YES | RING_ALLOW_LOWER | RDWR_ALLOW;
 
@@ -131,7 +131,7 @@ void gdt_install()
 	u8int user_data_segment_access = VALID_SEGMENT | PRIVILEGE_USER | TYPE_CODE_OR_DATA | EXECUTABLE_NO | DIRECTION_UP | RDWR_ALLOW;
 	gdt_set_gate(5, 0, 0xFFFFFFFF, user_data_segment_access, 0xCF);
 	u8int user_stack_segment_access = VALID_SEGMENT | PRIVILEGE_USER | TYPE_CODE_OR_DATA | EXECUTABLE_NO | DIRECTION_DOWN | RDWR_ALLOW;
-	gdt_set_gate(6, 0, 0x0, user_stack_segment_access, 0xCF);
+	gdt_set_gate(6, 0, 0xFFFFFFFF, user_stack_segment_access, 0xCF);
 
 	ft_memcpy((char*)0x800, (char*)gdt, gp.limit);
 	/* Flush out the old GDT and install the new changes! */
