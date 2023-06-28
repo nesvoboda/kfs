@@ -192,7 +192,8 @@ int screen_add_char(char c, uint8_t color)
 
 	// If writing causes scroll
 	if (_len_to_print(current_start_position) > TEXT_AREA_SIZE) {
-		current_start_position += 80;
+		current_start_position += get_chars_until_newline(current_start_position);
+		// get_real_chars()
 	}
 
 	// Else

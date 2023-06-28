@@ -4,6 +4,8 @@
 #include "config.h"
 #include "screen.h"
 
+int get_chars_until_newline(int pos);
+
 typedef struct text_char {
 	char c;
 	uint8_t color;
