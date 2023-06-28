@@ -20,4 +20,6 @@ void init_screen();
 void refresh_screen();
 void refresh_logs();
 
+void set_leftscroll_cutoff();
+
 #endif

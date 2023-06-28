@@ -62,6 +62,7 @@ void init_buffer()
 
 int read(int fd, void* buf, int count)
 {
+	set_leftscroll_cutoff();
 	init_buffer();
 	bytes_read = 0;
 	read_finished = 0;

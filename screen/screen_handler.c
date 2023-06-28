@@ -182,13 +182,22 @@ int screen_add_char(char c, uint8_t color)
 	new_char.color = color;
 
 	// Write character to text layer
-	int res = insert_character(new_char, current_index);
+	int res;
+	if (new_char.c == '\n') {
+		res = insert_character(new_char, get_len());
+	} else {
+		res = insert_character(new_char, current_index);
+	}
 
 	if (res != 0) {
 		return -1;
 	}
 
-	current_index += 1;
+	if (new_char.c == '\n') {
+		current_index = get_len();
+	} else {
+		current_index += 1;
+	}
 
 	// If writing causes scroll
 	if (_len_to_print(current_start_position) > TEXT_AREA_SIZE) {
@@ -225,9 +234,12 @@ void screen_erase()
 	refresh_screen();
 }
 
+
+int leftscroll_cutoff = 0;
+
 void _scroll_left()
 {
-	if (current_index == 0) {
+	if (current_index == 0 || current_index == leftscroll_cutoff) {
 		return;
 	}
 
