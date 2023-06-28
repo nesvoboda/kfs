@@ -133,7 +133,7 @@ extern u32int multiboot_info;
 #define SHT_LOUSER 0x80000000
 #define SHT_HIUSER 0xffffffff
 
-char* addr2name(u32int* addr);
+char* addr2name(void *addr);
 
 typedef struct {
 	u32int st_name;
