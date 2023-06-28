@@ -56,12 +56,6 @@ void kernel_main(void)
 	refresh_screen(0);
 	enable_cursor(0, 15);
 	printk(INFO, "System initialized");
-	// sleep(2 * 50);
-	// printk(ERROR, "Test error");
-	// printk(ERROR, "Test %xerror", 15);
-	char *test = "test";
-	printk(INFO, "Test kernel: d %d, x %x, s %s , p %p", 42, 21, test, "lol");
-	printf("Test normal: d %d, x %x, s %s , p %p", 42, 21, test, "lol");
 
 	shell();
 }
