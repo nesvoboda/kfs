@@ -18,6 +18,7 @@
         "fd.h": "c",
         "elf.h": "c",
         "compare": "c",
-        "backtrace.h": "c"
+        "backtrace.h": "c",
+        "io.h": "c"
     }
 }

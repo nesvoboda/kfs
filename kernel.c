@@ -5,6 +5,7 @@
 #include "screen.h"
 #include "screen_handler.h"
 #include "shell.h"
+#include "paging.h"
 
 static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg)
 {
@@ -56,6 +57,13 @@ void kernel_main(void)
 	refresh_screen(0);
 	enable_cursor(0, 15);
 	printk(INFO, "System initialized");
+
+	initialise_paging();
+
+	printk(INFO, "Paging initialized");
+
+	u32int *ptr = (u32int *)0xA0000000;
+	u32int crash = *ptr;
 
 	shell();
 }
