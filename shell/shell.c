@@ -20,7 +20,6 @@ Available commands:\n\
 \n\
 halt - shutdown the system\n\
 reboot - reboot the system\n\
-backtrace - show a stack trace with symbols\n\
 help - show this message\n";
 
 int verify_command(size_t len, char *command, char *input)
@@ -42,8 +41,6 @@ void shell()
 			halt();
 		else if (verify_command(6, "reboot", line))
 			reboot();
-		else if (verify_command(9, "backtrace", line))
-			backtrace(15);
 		else if (verify_command(4, "help", line))
 			printf("%s\n", help_message);
 		else
