@@ -43,3 +43,15 @@ qemu: all
 gdb: all
 	qemu-system-i386 -cdrom myos.iso -S -s &
 	gdb myos.bin --eval-command="target remote localhost:1234" ; killall qemu-system-i386
+
+test_files = paging/bitset_tests.c paging/bitset.c
+
+# test_objs = $(test_files:.c=.o)
+test_flags = -g -I includes
+
+test:
+	clang $(test_files) $(test_flags) -o test
+	./test; rm test
+
+test_debug:
+	clang $(test_files) $(test_flags) -o test
