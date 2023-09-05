@@ -19,6 +19,7 @@
         "elf.h": "c",
         "compare": "c",
         "backtrace.h": "c",
-        "io.h": "c"
+        "io.h": "c",
+        "bitset.h": "c"
     }
 }

@@ -14,4 +14,14 @@ else { \
 } \
 
 
+#define ASSERT_EQ(expected, actual) \
+if (expected == actual) { \
+    printf("Passed!\n"); \
+} \
+else { \
+    printf("Failed! Expected: %d, actual: %d, at line %d, file %s\n", expected, actual, __LINE__, __FILE__); \
+    exit(-1); \
+} \
+
+
 #endif
