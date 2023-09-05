@@ -142,29 +142,38 @@ void free_frame(page_t *page)
 
 page_directory_t *current_directory;
 
+pmem_manager_t current_manager;
+
 void initialise_paging()
 {
     // Reserve 16mb
     u32int mem_end_page = 0x1000000;
 
-    nframes = mem_end_page / 0x1000;
-    frames = (u32int *)kmalloc(INDEX_FROM_BIT(nframes));
-    memset(frames, 0, INDEX_FROM_BIT(nframes));
+    // nframes = mem_end_page / 0x1000;
+    // frames = (u32int *)kmalloc(INDEX_FROM_BIT(nframes));
+    // memset(frames, 0, INDEX_FROM_BIT(nframes));
 
-    page_directory_t *kernel_directory = kmalloc_a(sizeof(page_directory_t));
-    memset(kernel_directory, 0, sizeof(page_directory_t));
-    current_directory = kernel_directory;
+    // page_directory_t *kernel_directory = kmalloc_a(sizeof(page_directory_t));
+    // memset(kernel_directory, 0, sizeof(page_directory_t));
+    // current_directory = kernel_directory;
 
-    int i = 0;
+
+
+    // shadow
+    current_manager = init_pmem_manager(mem_end_page);
+   
+    u32int addr = 0;
     // placement address is changed by kmalloc!
-    while (i < placement_address)
+    while (addr < placement_address)
     {
-        alloc_frame(get_page(i, 1, kernel_directory), 0, 0);
-        i += 0x1000;
+        map(&current_manager, addr, addr, 0, 0);
+        addr += 0x1000;
     }
+
+
     register_interrupt_handler(14, page_fault);
 
-    switch_page_directory(kernel_directory);
+    switch_page_directory(&current_manager.directory);
 }
 
 void switch_page_directory(page_directory_t *dir) {
@@ -186,7 +195,7 @@ page_t *get_page(u32int address, int make, page_directory_t *dir)
         return &dir->tables[table_idx]->pages[address%1024];
     } else if (make) {
         u32int tmp;
-        dir->tables[table_idx] = (page_table_t*)kmalloc_ap(sizeof(page_table_t), &tmp);
+        dir->tables[table_idx] = kmalloc_ap(sizeof(page_table_t), &tmp);
         memset(dir->tables[table_idx], 0, 0x1000);
         dir->tablesPhysical[table_idx] = tmp | 0x7; // PRESENT, RW, US
         return &dir->tables[table_idx]->pages[address % 1024];
