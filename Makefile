@@ -4,7 +4,7 @@ idt/keyboard.c screen/screen_handler.c screen/text_handler.c screen/cursor.c \
 printf/ft_printf.c printf/ft_printf_string.c printf/ft_printf_pointer.c printf/ft_printf_hex.c \
 printf/ft_printf_integer.c printf/ft_printf_uint.c printf/ft_printf_char.c printf/lft_lite.c printf/lft_lite_fd.c \
 printf/ft_printf_format.c logs/logs.c timer/timer.c io/io.c shell/shell.c shell/reboot.c backtrace/backtrace.c \
-elf/elf.c paging/paging.c paging/page.c paging/bitset.c
+elf/elf.c paging/paging.c paging/page.c paging/bitset.c paging/kheap.c paging/ordered_array.c
 
 CFLAGS = -target i386-none-elf -nodefaultlibs  -fno-rtti -fno-stack-protector -fno-exceptions -ffreestanding -fno-builtin -nostdlib -g -I includes
 

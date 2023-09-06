@@ -6,6 +6,9 @@
 #include "screen_handler.h"
 #include "shell.h"
 #include "paging.h"
+#include "kheap.h"
+
+extern heap_t *kheap;
 
 static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg)
 {
@@ -61,7 +64,9 @@ void kernel_main(void)
 	initialise_paging();
 
 	printk(INFO, "Paging initialized");
-
+	int *a = alloc(sizeof(int), 0, kheap);
+	*a = 3;
+	printk(INFO, "%p", a);
 	u32int *ptr = (u32int *)0xA0000000;
 	u32int crash = *ptr;
 

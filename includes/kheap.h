@@ -4,9 +4,19 @@
 #define HEAP_MAGIC        0xDEADBEEF
 #define HEAP_MIN_SIZE     0x70000
 #include "ordered_array.h"
+#include "page.h"
+#include "ft_printf.h"
 /**
   Size information for a hole/block
 **/
+
+
+#define ASSERT(x) if (!(x)) { \
+  printk(KERNEL, "PANIC at line %d in file %s", __LINE__, __FILE__);\
+  while (1) { \
+  } \
+}
+
 typedef struct
 {
    u32int magic;   // Magic number, used for error checking and identification.
@@ -42,4 +52,4 @@ void *alloc(u32int size, u8int page_align, heap_t *heap);
 /**
   Releases a block allocated with 'alloc'.
 **/
-void free(void *p, heap_t *heap);
+// void free(void *p, heap_t *heap);

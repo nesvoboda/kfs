@@ -20,10 +20,10 @@ pmem_manager_t init_pmem_manager(int memory_size) {
 }
 
 // // just find any frame to map a virtual address
-// void alloc_frame(pmem_manager_t *manager, u32int virtual_address, int is_kernel, int is_writeable) {
-//     u32int frame_idx = bitset_first_unset(manager->frames);
-//     map(manager, frame_idx * 0x1000, virtual_address, is_kernel, is_writeable);
-// };
+void _alloc_frame(pmem_manager_t *manager, u32int virtual_address, int is_kernel, int is_writeable) {
+    u32int frame_idx = bitset_first_unset(manager->frames);
+    map(manager, frame_idx * 0x1000, virtual_address, is_kernel, is_writeable);
+};
 
 // Creates a page for a given virtual address and a physical address
 // Will currently break things if maps a physical address / virtual address that is already mapped
@@ -39,7 +39,7 @@ void map(pmem_manager_t *manager, u32int physical_address, u32int virtual_addres
     target_page->unused = 0;
 
     // Mark frame as mapped
-    // bitset_set(manager->frames, physical_address / 0x1000);
+    bitset_set(manager->frames, physical_address / 0x1000);
 }
 
 page_t *_get_page(pmem_manager_t *manager, u32int virtual_address) {

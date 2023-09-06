@@ -49,4 +49,6 @@ page_t *_get_page(pmem_manager_t *manager, u32int virtual_address);
 void map(pmem_manager_t *manager, u32int physical_address, u32int virtual_address, int is_kernel, int is_writeable);
 
 
+void _alloc_frame(pmem_manager_t *manager, u32int virtual_address, int is_kernel, int is_writeable);
+
 #endif

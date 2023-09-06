@@ -1,5 +1,7 @@
 #include "paging.h"
+#include "kheap.h"
 
+heap_t *kheap;
 
 // end is defined in the linker script.
 extern u32int end;
@@ -161,7 +163,14 @@ void initialise_paging()
 
     // shadow
     current_manager = init_pmem_manager(mem_end_page);
-   
+    int i = 0;
+
+
+    for (i = KHEAP_START; i < KHEAP_START+KHEAP_INITIAL_SIZE; i += 0x1000)
+        // map(&current_manager, i, i, 0, 1);
+        _get_page(&current_manager, i);
+
+
     u32int addr = 0;
     // placement address is changed by kmalloc!
     while (addr < placement_address)
@@ -171,9 +180,22 @@ void initialise_paging()
     }
 
 
+    for (i = KHEAP_START; i < KHEAP_START+KHEAP_INITIAL_SIZE; i += 0x1000)
+        _alloc_frame(&current_manager, i, 0, 1);
+
+
+        // _alloc_frame(&current_manager, i, 0, 1);
     register_interrupt_handler(14, page_fault);
 
     switch_page_directory(current_manager.directory);
+
+    int *a = KHEAP_START;
+
+    *a = 42;
+    printk(INFO, "a: %d", *a);
+
+    kheap = create_heap(KHEAP_START, KHEAP_START+KHEAP_INITIAL_SIZE, 0xCFFFF000, 0, 0);
+
 }
 
 void switch_page_directory(page_directory_t *dir) {

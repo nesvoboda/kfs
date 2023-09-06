@@ -26,6 +26,7 @@
         "initializer_list": "c",
         "ranges": "c",
         "span": "c",
-        "utility": "c"
+        "utility": "c",
+        "ordered_array.h": "c"
     }
 }
