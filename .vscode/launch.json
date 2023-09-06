@@ -2,7 +2,7 @@
    "version": "0.2.0",
     "configurations": [
         {
-            "name": "(gdb) Launch test",
+            "name": "Debug tests",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/test_debug",
@@ -27,23 +27,20 @@
             ]
         },
         {
-            "name": "Launch gdb-multiarch",
+            "name": "Debug",
             "type": "cppdbg",
             "request": "launch",
             "miDebuggerPath": "/usr/bin/gdb",
             "miDebuggerArgs": "--cd=${workspaceFolder} --nx",
-            // "preLaunchTask":"Launch QEMU in silent mode",
+            "preLaunchTask":"Make debug",
+            "postDebugTask": "Killall qemu",
             "MIMode": "gdb",
              "program": "${workspaceFolder}/myos.bin",
               "setupCommands": [
-                // {"text": "set remotetimeout 5"},
                 {"text": "target remote localhost:1234"},
-                // {"text": "monitor reset halt"},
-                // {"text": "file 'path/to/debug/image'"},
-                // {"text": "load"},
                 {"text": "break main","ignoreFailures": true}
             ],
             "cwd": "${workspaceFolder}"
-        }
+        },
     ]
 }

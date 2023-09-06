@@ -55,3 +55,6 @@ test:
 
 test_debug:
 	clang $(test_files) $(test_flags) -o test_debug
+
+debug: all
+	qemu-system-i386 -cdrom myos.iso -S -s
