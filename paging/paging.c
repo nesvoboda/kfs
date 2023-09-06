@@ -173,7 +173,7 @@ void initialise_paging()
 
     register_interrupt_handler(14, page_fault);
 
-    switch_page_directory(&current_manager.directory);
+    switch_page_directory(current_manager.directory);
 }
 
 void switch_page_directory(page_directory_t *dir) {

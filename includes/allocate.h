@@ -10,6 +10,7 @@
   #define KALLOCATE_P(size, ptr) malloc(size)
 #else
   #define KALLOCATE(size) kmalloc(size)
+  #define KALLOCATE_A(size) kmalloc_a(size)
   #define KALLOCATE_P(size, ptr) kmalloc_ap(size, ptr)
 #endif
 

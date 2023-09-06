@@ -20,6 +20,12 @@
         "compare": "c",
         "backtrace.h": "c",
         "io.h": "c",
-        "bitset.h": "c"
+        "bitset.h": "c",
+        "array": "c",
+        "string_view": "c",
+        "initializer_list": "c",
+        "ranges": "c",
+        "span": "c",
+        "utility": "c"
     }
 }

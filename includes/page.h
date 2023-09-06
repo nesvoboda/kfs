@@ -38,7 +38,7 @@ typedef struct page_directory
 typedef struct s_pmem_manager
 {
     t_bitset frames;
-    page_directory_t directory;
+    page_directory_t *directory;
     u32int total_size;
 } pmem_manager_t;
 
