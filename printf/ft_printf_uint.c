@@ -38,7 +38,7 @@ void ptunsigned(unsigned int n, int* ret)
 	}
 }
 
-void print_unsigned(va_list *kwargs, int* ret, t_info info)
+void print_unsigned(va_list* kwargs, int* ret, t_info info)
 {
 	unsigned int nbr;
 	int length;

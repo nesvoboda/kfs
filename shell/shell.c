@@ -22,7 +22,7 @@ halt - shutdown the system\n\
 reboot - reboot the system\n\
 help - show this message\n";
 
-int verify_command(size_t len, char *command, char *input)
+int verify_command(size_t len, char* command, char* input)
 {
 	return (!ft_strncmp(command, input, len + 1));
 }

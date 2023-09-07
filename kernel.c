@@ -2,13 +2,13 @@
 #include "ft_printf.h"
 #include "gdt.h"
 #include "idt.h"
+#include "kheap.h"
+#include "paging.h"
 #include "screen.h"
 #include "screen_handler.h"
 #include "shell.h"
-#include "paging.h"
-#include "kheap.h"
 
-extern heap_t *kheap;
+extern heap_t* kheap;
 
 static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg)
 {
@@ -64,7 +64,7 @@ void kernel_main(void)
 	initialise_paging();
 
 	printk(INFO, "Paging initialized");
-	int *a = alloc(sizeof(int), 0, kheap);
+	int* a = alloc(sizeof(int), 0, kheap);
 	*a = 3;
 	printk(INFO, "%p", a);
 

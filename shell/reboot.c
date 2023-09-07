@@ -20,7 +20,7 @@ keyboard interface IO port: data and control
 #define bit(n) (1 << (n)) /* Set bit n to 1 */
 
 /* Check if bit n in flags is set */
-#define check_flag(flags, n) ((flags)&bit(n))
+#define check_flag(flags, n) ((flags) & bit(n))
 
 void reboot()
 {

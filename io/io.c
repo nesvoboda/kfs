@@ -41,8 +41,7 @@ void io_add_char(char c, uint8_t color)
 		if (bytes_read >= desired_count) {
 			read_finished = 1;
 		}
-		
-	}
+		}
 }
 
 void io_erase()

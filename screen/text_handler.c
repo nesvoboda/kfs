@@ -73,13 +73,13 @@ int get_len()
 #define MIN(x, y) x < y ? x : y
 
 // Returns number of logical characters from pos to next new line
-int get_chars_until_newline(int pos) {
+int get_chars_until_newline(int pos)
+{
 	int res = 0;
 
-	while ((res != VGA_WIDTH) && (res != (buffer.len-1)) && (buffer.buf[pos].c != '\n'))
-	{
+	while ((res != VGA_WIDTH) && (res != (buffer.len - 1)) && (buffer.buf[pos].c != '\n')) {
 		res++;
 		pos++;
 	}
-	return MIN(80, res+1);
+	return MIN(80, res + 1);
 }

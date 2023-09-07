@@ -44,7 +44,7 @@ void pthex(unsigned int nbr, int* ret, int capital)
 	}
 }
 
-void print_hex(va_list *kwargs, int* ret, int capital, t_info info)
+void print_hex(va_list* kwargs, int* ret, int capital, t_info info)
 {
 	unsigned int nbr;
 	int length;

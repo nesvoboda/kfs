@@ -55,7 +55,7 @@ void calculate_spaces(t_info* info, int length)
 		info->spacer = ' ';
 }
 
-void print_integer(va_list *kwargs, int* ret, t_info info)
+void print_integer(va_list* kwargs, int* ret, t_info info)
 {
 	int nbr;
 	int length;

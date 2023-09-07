@@ -27,7 +27,7 @@ void ptptr(unsigned long long int nbr, int* ret)
 	}
 }
 
-void print_pointer(va_list *kwargs, int* ret, t_info info)
+void print_pointer(va_list* kwargs, int* ret, t_info info)
 {
 	unsigned long long int nbr;
 	void* ptr;

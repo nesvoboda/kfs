@@ -12,7 +12,7 @@
 
 #include "ft_printf.h"
 
-int print_string(va_list *kwargs, t_info info)
+int print_string(va_list* kwargs, t_info info)
 {
 	char* str;
 	int str_length;

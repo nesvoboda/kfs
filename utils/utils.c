@@ -52,19 +52,18 @@ int ft_strncmp(const char* s1, const char* s2, size_t n)
 	return (compatib(u1[i], u2[i]));
 }
 
-void	*memcpy(void *dst, const void *src, size_t n)
+void* memcpy(void* dst, const void* src, size_t n)
 {
-	size_t			i;
-	unsigned char	*our_dst;
-	unsigned char	*our_src;
+	size_t i;
+	unsigned char* our_dst;
+	unsigned char* our_src;
 
 	i = 0;
 	our_dst = dst;
 	our_src = (unsigned char*)src;
 	if (dst == NULL && src == NULL)
 		return (NULL);
-	while (i < n)
-	{
+	while (i < n) {
 		our_dst[i] = our_src[i];
 		i++;
 	}

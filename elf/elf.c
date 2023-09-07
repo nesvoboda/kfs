@@ -33,7 +33,7 @@ Elf32_Shdr* find_symtab(Elf32_Shdr* shdrs)
 
 u32int find_name_index(Elf32_Shdr* symtab, u32int addr)
 {
-	Elf32_Sym* symbols = (Elf32_Sym *) symtab->sh_addr;
+	Elf32_Sym* symbols = (Elf32_Sym*)symtab->sh_addr;
 
 	for (int i = 0; i < symtab->sh_size; i++) {
 		if (symbols[i].st_value == addr) {
@@ -60,7 +60,7 @@ char* find_name(Elf32_Shdr* shdrs, u32int name_index)
 	return NULL;
 }
 
-char* addr2name(void *addr)
+char* addr2name(void* addr)
 {
 	if (!is_elf_available()) {
 		return NULL;
@@ -68,14 +68,14 @@ char* addr2name(void *addr)
 
 	multiboot_info_t* mb_info = (multiboot_info_t*)multiboot_info;
 
-	Elf32_Shdr* symtab = find_symtab((Elf32_Shdr *) mb_info->u.elf_sec.addr);
+	Elf32_Shdr* symtab = find_symtab((Elf32_Shdr*)mb_info->u.elf_sec.addr);
 
 	// No symtab header loaded
 	if (symtab == NULL) {
 		return NULL;
 	}
 
-	u32int name_index_in_strtab = find_name_index(symtab, (u32int) addr);
+	u32int name_index_in_strtab = find_name_index(symtab, (u32int)addr);
 
 	// All string tables have NULL as string index 0, so if we return 0,
 	// that means that we didn't have a symbol entry for this function
@@ -83,7 +83,7 @@ char* addr2name(void *addr)
 		return NULL;
 	}
 
-	char* name = find_name((Elf32_Shdr *) mb_info->u.elf_sec.addr, name_index_in_strtab);
+	char* name = find_name((Elf32_Shdr*)mb_info->u.elf_sec.addr, name_index_in_strtab);
 
 	return name;
 }

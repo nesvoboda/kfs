@@ -234,7 +234,6 @@ void screen_erase()
 	refresh_screen();
 }
 
-
 int leftscroll_cutoff = 0;
 
 void _scroll_left()
@@ -315,6 +314,7 @@ void screen_handle_scroll(enum direction dir)
 	refresh_screen();
 }
 
-void set_leftscroll_cutoff() {
+void set_leftscroll_cutoff()
+{
 	leftscroll_cutoff = current_index;
 }
