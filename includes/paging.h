@@ -4,8 +4,7 @@
 # include "page.h"
 # include "types.h"
 # include "idt.h" // for registers_t
-# include "ft_printf.h" // for panic -> can be refactored into panic
-
+# include "panic.h"
 
 
 void initialise_paging();

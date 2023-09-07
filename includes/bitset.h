@@ -2,6 +2,7 @@
 # define BITSET_H
 
 #include "types.h"
+#include "allocate.h"
 
 // Bitset data structure
 typedef struct s_bitset {

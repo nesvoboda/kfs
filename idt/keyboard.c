@@ -57,7 +57,7 @@ void disable_keyboard()
 
 void handle_scroll(enum direction dir)
 {
-	screen_handle_scroll(dir, current_screen);
+	screen_handle_scroll(dir);
 }
 
 void erase()

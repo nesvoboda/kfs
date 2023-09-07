@@ -27,6 +27,13 @@
         "ranges": "c",
         "span": "c",
         "utility": "c",
-        "ordered_array.h": "c"
+        "ordered_array.h": "c",
+        "allocate.h": "c",
+        "kheap.h": "c",
+        "page.h": "c",
+        "utils.h": "c",
+        "reboot.h": "c",
+        "paging.h": "c",
+        "panic.h": "c"
     }
 }

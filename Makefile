@@ -4,7 +4,7 @@ idt/keyboard.c screen/screen_handler.c screen/text_handler.c screen/cursor.c \
 printf/ft_printf.c printf/ft_printf_string.c printf/ft_printf_pointer.c printf/ft_printf_hex.c \
 printf/ft_printf_integer.c printf/ft_printf_uint.c printf/ft_printf_char.c printf/lft_lite.c printf/lft_lite_fd.c \
 printf/ft_printf_format.c logs/logs.c timer/timer.c io/io.c shell/shell.c shell/reboot.c backtrace/backtrace.c \
-elf/elf.c paging/paging.c paging/page.c paging/bitset.c paging/kheap.c paging/ordered_array.c
+elf/elf.c paging/paging.c paging/page.c paging/bitset.c paging/kheap.c paging/ordered_array.c paging/internal_allocate.c
 
 CFLAGS = -target i386-none-elf -nodefaultlibs  -fno-rtti -fno-stack-protector -fno-exceptions -ffreestanding -fno-builtin -nostdlib -g -I includes
 
@@ -44,7 +44,7 @@ gdb: all
 	qemu-system-i386 -cdrom myos.iso -S -s &
 	gdb myos.bin --eval-command="target remote localhost:1234" ; killall qemu-system-i386
 
-test_files = paging/bitset_tests.c paging/bitset.c test/main.c paging/page_tests.c utils/utils.c paging/page.c
+test_files = paging/bitset_tests.c paging/bitset.c test/main.c paging/page_tests.c utils/utils.c paging/page.c heap/ordered_array_tests.c
 
 # test_objs = $(test_files:.c=.o)
 test_flags = -g -I includes --define-macro TEST=true

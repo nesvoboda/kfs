@@ -1,7 +1,9 @@
 #ifndef ORDERED_ARRAY_H
-#define ORDERED_ARRAY_H
+# define ORDERED_ARRAY_H
 
-#include "types.h"
+# include "types.h"
+# include "panic.h"
+# include "internal_allocate.h"
 
 typedef void* type_t;
 
@@ -27,10 +29,5 @@ void insert_ordered_array(type_t item, ordered_array_t *array);
 type_t lookup_ordered_array(u32int i, ordered_array_t *array);
 
 void remove_ordered_array(u32int i, ordered_array_t *array);
-
-#define ASSERT(x)  if (!(x)){ \
-  while (1) { \
-  } \
-}
 
 #endif

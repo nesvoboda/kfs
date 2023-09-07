@@ -1,3 +1,5 @@
+#ifndef KHEAP_H
+# define KHEAP_H
 #define KHEAP_START         0xC0000000
 #define KHEAP_INITIAL_SIZE  0x100000
 #define HEAP_INDEX_SIZE   0x20000
@@ -6,16 +8,11 @@
 #include "ordered_array.h"
 #include "page.h"
 #include "ft_printf.h"
+#include "panic.h"
 /**
   Size information for a hole/block
 **/
 
-
-#define ASSERT(x) if (!(x)) { \
-  printk(KERNEL, "PANIC at line %d in file %s", __LINE__, __FILE__);\
-  while (1) { \
-  } \
-}
 
 typedef struct
 {
@@ -53,3 +50,16 @@ void *alloc(u32int size, u8int page_align, heap_t *heap);
   Releases a block allocated with 'alloc'.
 **/
 // void free(void *p, heap_t *heap);
+
+u32int internal_kmalloc_a(u32int size);
+
+// returns a physical address.
+u32int internal_kmalloc_p(u32int size, u32int *phys);
+
+// page aligned and returns a physical address.
+u32int internal_kmalloc_ap(u32int size, u32int *phys);
+
+// vanilla (normal).
+u32int internal_kmalloc(u32int size);
+
+#endif

@@ -33,7 +33,6 @@ typedef struct page_directory
     u32int physicalAddr;
 } page_directory_t;
 
-
 // physical memory manager
 typedef struct s_pmem_manager
 {
@@ -50,5 +49,7 @@ void map(pmem_manager_t *manager, u32int physical_address, u32int virtual_addres
 
 
 void _alloc_frame(pmem_manager_t *manager, u32int virtual_address, int is_kernel, int is_writeable);
+
+
 
 #endif

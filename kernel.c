@@ -67,8 +67,6 @@ void kernel_main(void)
 	int *a = alloc(sizeof(int), 0, kheap);
 	*a = 3;
 	printk(INFO, "%p", a);
-	u32int *ptr = (u32int *)0xA0000000;
-	u32int crash = *ptr;
 
 	shell();
 }

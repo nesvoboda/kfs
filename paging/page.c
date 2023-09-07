@@ -5,12 +5,12 @@ pmem_manager_t init_pmem_manager(int memory_size) {
     manager.frames = bitset_create(memory_size / 0x1000);
     manager.total_size = memory_size;
 
-    manager.directory = KALLOCATE_A(sizeof(page_directory_t));
+    manager.directory = (page_directory_t*)KALLOCATE_A(sizeof(page_directory_t));
 
     // init page directory
     for (int i =0 ; i< 1024; i++) {
         manager.directory->tables[i] = NULL;
-        manager.directory->tablesPhysical[i] = NULL;
+        manager.directory->tablesPhysical[i] = (u32int)NULL;
     }
     // memset(&manager.directory.tables, 0, 1024);
     // memset(&manager.directory.tablesPhysical, 0, 1024);

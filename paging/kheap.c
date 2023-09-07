@@ -13,7 +13,7 @@ static s32int find_smallest_hole(u32int size, u8int page_align, heap_t *heap)
            // Page-align the starting point of this header.
            u32int location = (u32int)header;
            s32int offset = 0;
-           if ((location+sizeof(header_t)) & 0xFFFFF000 != 0)
+           if ((location+sizeof(header_t) & 0xFFFFF000) != 0)
                offset = 0x1000 /* page size */  - (location+sizeof(header_t))%0x1000;
            s32int hole_size = (s32int)header->size - offset;
            // Can we fit now?
@@ -38,7 +38,7 @@ static s8int header_t_less_than(void*a, void *b)
 
 heap_t *create_heap(u32int start, u32int end_addr, u32int max, u8int supervisor, u8int readonly)
 {
-   heap_t *heap = (heap_t*)kmalloc(sizeof(heap_t));
+   heap_t *heap = (heap_t*)internal_kmalloc(sizeof(heap_t));
 
    // All our assumptions are made on startAddress and endAddress being page-aligned.
    ASSERT(start%0x1000 == 0);
@@ -51,7 +51,7 @@ heap_t *create_heap(u32int start, u32int end_addr, u32int max, u8int supervisor,
    start += sizeof(type_t)*HEAP_INDEX_SIZE;
 
    // Make sure the start address is page-aligned.
-   if (start & 0xFFFFF000 != 0)
+   if ((start & 0xFFFFF000) != 0)
    {
        start &= 0xFFFFF000;
        start += 0x1000;
@@ -79,7 +79,7 @@ static void expand(u32int new_size, heap_t *heap)
    // Sanity check.
    ASSERT(new_size > heap->end_address - heap->start_address);
    // Get the nearest following page boundary.
-   if (new_size&0xFFFFF000 != 0)
+   if ((new_size&0xFFFFF000) != 0)
    {
        new_size &= 0xFFFFF000;
        new_size += 0x1000;

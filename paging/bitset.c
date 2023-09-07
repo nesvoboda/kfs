@@ -1,10 +1,9 @@
 #include "bitset.h"
-#include "allocate.h"
 
 t_bitset bitset_create(int max_size) {
     t_bitset ret;
     int ints_to_go = max_size / 32 + 1;
-    ret.data = KALLOCATE(sizeof(u32int) * ints_to_go);
+    ret.data = (u32int*)(sizeof(u32int) * ints_to_go);
     for (int i = 0; i < ints_to_go; i++) {
         ret.data[i] = 0;
     }
@@ -48,7 +47,7 @@ int bitset_first_set(t_bitset bitset) {
 }
 
 int bitset_first_unset(t_bitset bitset) {
-    int full_integers = bitset.size / 32;
+    int full_integers = bitset.size / 32 + 1;
 
     for (int i = 0; i < full_integers; i++) {
         if (bitset.data[i] != 1) {
