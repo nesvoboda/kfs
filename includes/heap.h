@@ -23,6 +23,7 @@ void free(void *addr);
 
 typedef struct header_s {
     u32int size;
+    int is_hole;
 } header_t;
 
 typedef struct footer_s {

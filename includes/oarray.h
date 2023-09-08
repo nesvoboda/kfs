@@ -19,4 +19,9 @@ typedef struct ordered_array {
 
 int lessthan(type_t a, type_t b);
 
+void oarray_create(oarray_t* array, u32int max_size, predicate* pr);
+void oarray_insert(oarray_t* array, type_t item);
+void oarray_delete(oarray_t* array, size_t index);
+type_t oarray_retrieve(oarray_t* array, size_t index);
+
 #endif
