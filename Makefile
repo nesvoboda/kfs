@@ -44,8 +44,9 @@ gdb: all
 	qemu-system-i386 -cdrom myos.iso -S -s &
 	gdb myos.bin --eval-command="target remote localhost:1234" ; killall qemu-system-i386
 
-test_files = paging/bitset_tests.c paging/bitset.c test/main.c paging/page_tests.c utils/utils.c paging/page.c heap/ordered_array_tests.c
-
+test_files = paging/bitset_tests.c paging/bitset.c test/main.c \
+paging/page_tests.c utils/utils.c paging/page.c \
+heap/oarray_tests.c heap/oarray.c heap/heap_tests.c
 # test_objs = $(test_files:.c=.o)
 test_flags = -g -I includes --define-macro TEST=true
 

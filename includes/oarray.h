@@ -3,6 +3,7 @@
 
 # include "types.h"
 # include "allocate.h"
+# include "panic.h"
 
 typedef void* type_t;
 
@@ -14,7 +15,8 @@ typedef struct ordered_array {
     predicate *p;
     u32int len;
 
-} ordered_array_t;
+} oarray_t;
 
+int lessthan(type_t a, type_t b);
 
 #endif

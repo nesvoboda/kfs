@@ -34,6 +34,8 @@
         "utils.h": "c",
         "reboot.h": "c",
         "paging.h": "c",
-        "panic.h": "c"
+        "panic.h": "c",
+        "oarray.h": "c",
+        "heap.h": "c"
     }
 }

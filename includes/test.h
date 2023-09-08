@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define ASSERT(predicate) \
+#define TEST_ASSERT(predicate) \
 if (predicate == 1) { \
     printf("Passed!\n"); \
 } \

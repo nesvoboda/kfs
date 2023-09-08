@@ -8,7 +8,7 @@ void test_bitset_create_test()
 	t_bitset test = bitset_create(65);
 
 	ASSERT_EQ(65, test.size);
-	ASSERT(11 < malloc_usable_size(test.data));
+	TEST_ASSERT(11 < malloc_usable_size(test.data));
 	// 3 ints, all zeroes
 	for (int i = 0; i < 3; i++) {
 		ASSERT_EQ(0, test.data[i]);

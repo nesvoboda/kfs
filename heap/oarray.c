@@ -1,6 +1,6 @@
 #include "oarray.h"
 
-void oarray_create(ordered_array_t* array, u32int max_size, predicate* pr)
+void oarray_create(oarray_t* array, u32int max_size, predicate* pr)
 {
 	array->data = KALLOCATE(max_size * sizeof(type_t));
 	array->size = max_size;
@@ -11,7 +11,7 @@ void oarray_create(ordered_array_t* array, u32int max_size, predicate* pr)
 	array->len = 0;
 }
 
-int find_position(ordered_array_t* array, type_t item)
+int find_position(oarray_t* array, type_t item)
 {
 	int i = 0;
 	for (i = 0; i < array->len; i++) {
@@ -23,7 +23,7 @@ int find_position(ordered_array_t* array, type_t item)
 	return i;
 }
 
-void oarray_insert(ordered_array_t* array, type_t item)
+void oarray_insert(oarray_t* array, type_t item)
 {
 	int position = find_position(array, item);
 	if (position > array->size) {
@@ -46,7 +46,7 @@ void oarray_insert(ordered_array_t* array, type_t item)
 	array->len += 1;
 }
 
-void oarray_delete(ordered_array_t* array, size_t index)
+void oarray_delete(oarray_t* array, size_t index)
 {
 	for (int i = index; i < array->len - 1; i++) {
 		array->data[i] = array->data[i + 1];
@@ -55,7 +55,7 @@ void oarray_delete(ordered_array_t* array, size_t index)
 	return;
 }
 
-type_t oarray_retrieve(ordered_array_t* array, size_t index)
+type_t oarray_retrieve(oarray_t* array, size_t index)
 {
 	return array->data[index];
 }

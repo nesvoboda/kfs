@@ -4,7 +4,7 @@ t_bitset bitset_create(int max_size)
 {
 	t_bitset ret;
 	int ints_to_go = max_size / 32 + 1;
-	ret.data = (u32int*)(sizeof(u32int) * ints_to_go);
+	ret.data = (u32int*)KALLOCATE(sizeof(u32int) * ints_to_go);
 	for (int i = 0; i < ints_to_go; i++) {
 		ret.data[i] = 0;
 	}

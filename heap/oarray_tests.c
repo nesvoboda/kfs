@@ -4,7 +4,7 @@
 
 void test_ordered_array_insert()
 {
-	ordered_array_t oa;
+	oarray_t oa;
 	oarray_create(&oa, 50, &lessthan);
 
 	oarray_insert(&oa, 7);
@@ -23,7 +23,7 @@ void test_ordered_array_insert()
 
 void test_ordered_array_remove()
 {
-	ordered_array_t oa;
+	oarray_t oa;
 	oarray_create(&oa, 50, &lessthan);
 
 	oarray_insert(&oa, 7);
