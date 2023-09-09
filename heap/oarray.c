@@ -36,7 +36,7 @@ void oarray_insert(oarray_t* array, type_t item)
 		return;
 	}
 
-	int tmp = array->data[position];
+	type_t tmp = array->data[position];
 	for (int i = position + 1; i < array->len; i++) {
 		tmp = array->data[i];
 		array->data[i] = array->data[i - 1];

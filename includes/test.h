@@ -19,7 +19,7 @@ if (expected == actual) { \
     printf("Passed!\n"); \
 } \
 else { \
-    printf("Failed! Expected: %d, actual: %d, at line %d, file %s\n", expected, actual, __LINE__, __FILE__); \
+    printf("Failed! Expected: %lld, actual: %lld, at line %d, file %s\n", (long long)expected, (long long)actual, __LINE__, __FILE__); \
     exit(-1); \
 } \
 

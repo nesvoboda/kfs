@@ -7,7 +7,7 @@
 
 typedef void* type_t;
 
-typedef int(predicate) (type_t *, type_t *);
+typedef int(predicate) (type_t, type_t);
 
 typedef struct ordered_array {
     type_t *data;

@@ -2,7 +2,8 @@
 #include "test.h"
 
 #define HEAP_INDEX_SIZE   0x20000
-#define true_size(x) (x + sizeof(header_t) + sizeof(footer_t))
+#define size_with_buffers(x) (x + sizeof(header_t) + sizeof(footer_t))
+#define usable_size(x) (x - sizeof(header_t) - sizeof(footer_t))
 
 int header_predicate(void *a, void *b) {
     header_t *header_a = (header_t *) a;
@@ -26,10 +27,10 @@ _heap_t *heap_create(u32int size, int is_kernel, int is_readonly) {
 
     header_t *hole = (header_t *)h->data;
     hole->is_hole = 1;
-    hole->size = true_size(size);
+    hole->size = usable_size(size);
 
-    // Footer?
-    footer_t *footer = (footer_t *)(((void *)hole)+sizeof(header_t)+size);
+    // Footer
+    footer_t *footer = (footer_t *)(((void *)hole)+sizeof(header_t)+hole->size);
     footer->to_header = hole;
 
     oarray_insert(&h->holes, hole);
@@ -59,7 +60,7 @@ void remove_hole(_heap_t *h, header_t *hole) {
 
 // Glues the hole with the next hole
 void merge_right(_heap_t *h, header_t *current_hole) {
-    header_t *next_hole = (void *)current_hole + true_size(current_hole->size);
+    header_t *next_hole = (void *)current_hole + size_with_buffers(current_hole->size);
 
     current_hole->size += next_hole->size + sizeof(header_t) + sizeof(footer_t);
 
@@ -78,7 +79,7 @@ int merge_left(_heap_t *h, header_t *freed_block) {
     //[header][hole][footer][header][hole][footer]
     if (prev_head && prev_head->is_hole)
     {
-        prev_head->size += true_size(freed_block->size);
+        prev_head->size += size_with_buffers(freed_block->size);
 
         // Current footer will now point to the previous header
         // For some reason, current footer points to previous head
@@ -99,7 +100,7 @@ int merge_left(_heap_t *h, header_t *freed_block) {
 void deallocate(_heap_t *h, void *addr)
 {
     header_t *head = addr - sizeof(header_t);
-    header_t *next_head = (void *)head + true_size(head->size);
+    header_t *next_head = (void *)head + size_with_buffers(head->size);
     footer_t *prev_footer = ((footer_t *)((void *)head - sizeof(footer_t)));
     
     head->is_hole = 1;
@@ -136,20 +137,34 @@ void *allocate(_heap_t *h, u32int size) {
     footer_t *f = (footer_t *)((void *)hole + size+sizeof(header_t));
     f->to_header = hole;
 
-    header_t *new_hole = (void *) hole + true_size(size);
+    if (hole->size > size) {
+        header_t *new_hole = (void *) hole + size_with_buffers(size);
     
-    new_hole->size = hole->size - true_size(size);
-    hole->size = size;
-    
-    if (new_hole->size != 0) {    
+        new_hole->size = hole->size - size_with_buffers(size);
         new_hole->is_hole = 1;
-        footer_t *new_f = (footer_t *)((void *)new_hole + new_hole->size);
+        footer_t *new_f = (footer_t *)((void *)new_hole + new_hole->size + sizeof(header_t));
         new_f->to_header = new_hole;
         oarray_insert(&h->holes, new_hole);
     }
-    remove_hole(h, hole);
+    hole->size = size;    remove_hole(h, hole);
 
     return (void*)(hole) + sizeof(header_t);
+}
+
+void test_heap_create() {
+    _heap_t *h = heap_create(500, 0, 0);
+
+    // Checking hole state
+    ASSERT_EQ(1, h->holes.len);
+
+    header_t *hole = oarray_retrieve(&h->holes, 0);
+    ASSERT_EQ(1, hole->is_hole);
+    ASSERT_EQ(usable_size(500), hole->size);
+    ASSERT_EQ(h->data, hole);
+
+    // Header-footer
+    footer_t *hole_footer = (void*)hole + hole->size + sizeof(header_t);
+    ASSERT_EQ(hole, hole_footer->to_header);
 }
 
 void test_heap_simple() {
@@ -163,11 +178,11 @@ void test_heap_simple() {
     // holes state
     // there should be one hole for the rest of the space
     ASSERT_EQ(1, h->holes.len);
-
+        
     header_t *hole = oarray_retrieve(&h->holes, 0);
-    ASSERT_EQ(1, hole->is_hole);
-    ASSERT_EQ(true_size(500) - sizeof(header_t) - sizeof(footer_t) - 10, hole->size);
 
+    ASSERT_EQ(1, hole->is_hole);
+    ASSERT_EQ(usable_size(500 - sizeof(header_t) - sizeof(footer_t) - 10), hole->size);
 
     // Checking block footer
     header_t *first_block_header = (void *) res - sizeof(header_t);
@@ -176,7 +191,7 @@ void test_heap_simple() {
 
     // Checking hole footer
     header_t *first_hole_header = hole;
-    footer_t *first_hole_footer = (void *)hole + hole->size;
+    footer_t *first_hole_footer = (void *)hole + sizeof(header_t) + hole->size;
     ASSERT_EQ(first_hole_header, first_hole_footer->to_header);
 
     void *res2 = allocate(h, 10);
@@ -194,6 +209,15 @@ void test_heap_free() {
     void *tmp = res;
 
     deallocate(h, res);
+
+    // there should be one hole for the rest of the space
+    ASSERT_EQ(1, h->holes.len);
+
+    header_t *hole = oarray_retrieve(&h->holes, 0);
+    ASSERT_EQ(1, hole->is_hole);
+    ASSERT_EQ(usable_size(500), hole->size);
+
+    // footer_t *hole_footer = hole + size_with_buffers()
 
     void *res2 = allocate(h, 10);
 
@@ -278,6 +302,7 @@ void test_merge_left() {
 }
 
 void heap_tests() {
+    test_heap_create();
     test_heap_simple();
     test_heap_free();
     test_hole_choice();
