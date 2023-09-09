@@ -151,6 +151,17 @@ void *allocate(_heap_t *h, u32int size) {
     return (void*)(hole) + sizeof(header_t);
 }
 
+size_t memory_size(void *addr) {
+    header_t *header = addr - sizeof(header_t);
+    if (header->is_hole == 1) {
+        return 0;
+    }
+    return header->size;
+}
+
+
+//// TESTS
+
 void test_heap_create() {
     _heap_t *h = heap_create(500, 0, 0);
 
@@ -217,6 +228,10 @@ void test_heap_free() {
     ASSERT_EQ(1, hole->is_hole);
     ASSERT_EQ(usable_size(500), hole->size);
 
+    // Checking header-footer
+    footer_t *footer = (void*)hole + hole->size + sizeof(header_t);
+    ASSERT_EQ(hole, footer->to_header);
+
     // footer_t *hole_footer = hole + size_with_buffers()
 
     void *res2 = allocate(h, 10);
@@ -243,28 +258,6 @@ void test_hole_choice() {
     // The allocator chooses the smaller hole
     ASSERT_EQ(res2, res5);
 }
-
-// Uncomment if merge left test doesn't uncover any bugs 
-// this shows a merge left bug
-
-// void test_hole_choice_2() {
-//     _heap_t *h = heap_create(500, 0, 0);
-
-//     void *res1 = allocate(h, 10);
-//     void *res2 = allocate(h, 40); // future big hole
-//     void *res3 = allocate(h, 10);
-//     void *res4 = allocate(h, 10); // future small hole
-//     void *res5 = allocate(h, 10);
-
-
-//     deallocate(h, res2);
-//     deallocate(h, res3);
-
-//     void *res6 = allocate(h, 10);
-
-//     // The allocator chooses the smaller hole
-//     ASSERT_EQ(res3, res6);
-// }
 
 void test_hole_choice_3() {
     _heap_t *h = heap_create(500, 0, 0);
@@ -301,16 +294,60 @@ void test_merge_left() {
     ASSERT_EQ(res1, res3);
 }
 
+void test_merge_both() {
+    _heap_t *h = heap_create(500, 0, 0);
+
+    void *res1 = allocate(h, 10);
+    void *res2 = allocate(h, 10);
+    void *res3 = allocate(h, 10);
+
+    deallocate(h, res1);
+    deallocate(h, res3);
+    deallocate(h, res2);
+
+    ASSERT_EQ(1, h->holes.len);
+
+    header_t *hole = oarray_retrieve(&h->holes, 0);
+
+    ASSERT_EQ(h->data, hole);
+    ASSERT_EQ(usable_size(500), hole->size);
+    ASSERT_EQ(1, hole->is_hole);
+    
+    footer_t *hole_footer = (void*)hole + sizeof(header_t) + hole->size;
+    ASSERT_EQ(hole, hole_footer->to_header);
+
+    void *res4 = allocate(h, 30);
+
+    // Two holes were merged, so the 20b
+    // block can be placed there
+    ASSERT_EQ(res1, res4);
+}
+
+void test_size() {
+    _heap_t *h = heap_create(500, 0, 0);
+
+    void *res1 = allocate(h, 10);
+    void *res2 = allocate(h, 10);
+    void *res3 = allocate(h, 20);
+
+    deallocate(h, res2);
+
+    ASSERT_EQ(10, memory_size(res1));
+    ASSERT_EQ(0, memory_size(res2));
+    ASSERT_EQ(20, memory_size(res3));
+
+}
+
 void heap_tests() {
     test_heap_create();
     test_heap_simple();
     test_heap_free();
     test_hole_choice();
-    // test_hole_choice_2();
     test_hole_choice_3();
     test_merge_left();
-
-    // TODO tests:
-    // - merging left
-    // - merging both left and right
+    test_merge_both();
+    test_size();
 }
+
+
+// Todo: size, brk
