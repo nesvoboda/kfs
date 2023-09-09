@@ -58,10 +58,10 @@ void initialise_paging()
 
 	// nframes = mem_end_page / 0x1000;
 	// frames = (u32int *)kmalloc(INDEX_FROM_BIT(nframes));
-	// memset(frames, 0, INDEX_FROM_BIT(nframes));
+	// _memset(frames, 0, INDEX_FROM_BIT(nframes));
 
 	// page_directory_t *kernel_directory = internal_kmalloc_a(sizeof(page_directory_t));
-	// memset(kernel_directory, 0, sizeof(page_directory_t));
+	// _memset(kernel_directory, 0, sizeof(page_directory_t));
 	// current_directory = kernel_directory;
 
 	// shadow

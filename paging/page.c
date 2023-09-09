@@ -11,10 +11,10 @@ pmem_manager_t init_pmem_manager(int memory_size)
 	// init page directory
 	for (int i = 0; i < 1024; i++) {
 		manager.directory->tables[i] = NULL;
-		manager.directory->tablesPhysical[i] = (u32int)NULL;
+		manager.directory->tablesPhysical[i] = 0;
 	}
-	// memset(&manager.directory.tables, 0, 1024);
-	// memset(&manager.directory.tablesPhysical, 0, 1024);
+	// _memset(&manager.directory.tables, 0, 1024);
+	// _memset(&manager.directory.tablesPhysical, 0, 1024);
 
 	// init pag
 	return manager;

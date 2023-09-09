@@ -9,7 +9,7 @@ ordered_array_t create_ordered_array(u32int max_size, lessthan_predicate_t less_
 {
 	ordered_array_t to_ret;
 	to_ret.array = (void*)internal_kmalloc(max_size * sizeof(type_t));
-	memset(to_ret.array, 0, max_size * sizeof(type_t));
+	_memset(to_ret.array, 0, max_size * sizeof(type_t));
 	to_ret.size = 0;
 	to_ret.max_size = max_size;
 	to_ret.less_than = less_than;
@@ -20,7 +20,7 @@ ordered_array_t place_ordered_array(void* addr, u32int max_size, lessthan_predic
 {
 	ordered_array_t to_ret;
 	to_ret.array = (type_t*)addr;
-	memset(to_ret.array, 0, max_size * sizeof(type_t));
+	_memset(to_ret.array, 0, max_size * sizeof(type_t));
 	to_ret.size = 0;
 	to_ret.max_size = max_size;
 	to_ret.less_than = less_than;

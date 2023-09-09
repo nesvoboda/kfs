@@ -14,7 +14,7 @@ void init_logs()
 {
 	for (int i = 0; i < LOG_LINES; i++) {
 		_logs[i].log_level = EMPTY;
-		memset(_logs[i].line, '\0', LOG_LINE_LENGTH);
+		_memset(_logs[i].line, '\0', LOG_LINE_LENGTH);
 	}
 }
 

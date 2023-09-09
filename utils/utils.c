@@ -8,7 +8,7 @@ size_t strlen(const char* str)
 	return len;
 }
 
-void* memset(void* b, int c, int len)
+void* _memset(void* b, int c, int len)
 {
 	unsigned char* str;
 	unsigned char* lim;

@@ -183,8 +183,8 @@ void init_idt()
 	idt_ptr.limit = sizeof(idt_entry_t) * 256 - 1;
 	idt_ptr.base = (u32int)&idt_entries;
 
-	memset(&idt_entries, 0, sizeof(idt_entry_t) * 256);
-	memset(&interrupt_handlers, 0, sizeof(isr_t) * 256);
+	_memset(&idt_entries, 0, sizeof(idt_entry_t) * 256);
+	_memset(&interrupt_handlers, 0, sizeof(isr_t) * 256);
 	PIC_remap(0x20, 0x28);
 	asm("sti");
 
