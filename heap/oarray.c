@@ -11,6 +11,19 @@ void oarray_create(oarray_t* array, u32int max_size, predicate* pr)
 	array->len = 0;
 }
 
+oarray_t oarray_place(void *addr, u32int max_size, predicate* pr)
+{
+	oarray_t o;
+	o.data = addr;
+	o.size = max_size;
+	o.p = pr;
+	for (int i = 0; i < max_size; i++) {
+		o.data[i] = NULL;
+	}
+	o.len = 0;
+	return o;
+}
+
 int find_position(oarray_t* array, type_t item)
 {
 	int i = 0;

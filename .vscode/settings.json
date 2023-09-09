@@ -41,7 +41,8 @@
         "__split_buffer": "c",
         "bitset": "c",
         "unordered_map": "c",
-        "vector": "c"
+        "vector": "c",
+        "shell.h": "c"
     },
     "cmake.configureOnOpen": false
 }

@@ -5,17 +5,28 @@
 # include "oarray.h"
 # include "allocate.h"
 
+#define HEAP_INDEX_SIZE   0x20000
+#define size_with_buffers(x) (x + sizeof(header_t) + sizeof(footer_t))
+#define usable_size(x) (x - sizeof(header_t) - sizeof(footer_t))
+
+#define KHEAP_START         0xC0000000
+#define KHEAP_INITIAL_SIZE  0x100000
+#define HEAP_INDEX_SIZE   0x20000
+#define HEAP_MAGIC        0xDEADBEEF
+#define HEAP_MIN_SIZE     0x70000
 
 typedef struct heap_s {
     void *data;
+    void *index;
     u32int size;
     int is_kernel;
     int is_readonly;
     oarray_t holes;
 } _heap_t;
 
-
 _heap_t *heap_create(u32int size, int is_kernel, int is_readonly);
+
+_heap_t heap_place(void *addr, u32int size, int is_kernel, int is_readonly);
 
 void *allocate(_heap_t *h, u32int size);
 
@@ -31,5 +42,8 @@ typedef struct header_s {
 typedef struct footer_s {
     void *to_header;
 } footer_t;
+
+size_t memory_size(void *addr);
+void deallocate(_heap_t *h, void *addr);
 
 #endif
