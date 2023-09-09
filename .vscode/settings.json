@@ -36,6 +36,12 @@
         "paging.h": "c",
         "panic.h": "c",
         "oarray.h": "c",
-        "heap.h": "c"
-    }
+        "heap.h": "c",
+        "__hash_table": "c",
+        "__split_buffer": "c",
+        "bitset": "c",
+        "unordered_map": "c",
+        "vector": "c"
+    },
+    "cmake.configureOnOpen": false
 }

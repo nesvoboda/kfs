@@ -38,11 +38,9 @@ _heap_t *heap_create(u32int size, int is_kernel, int is_readonly) {
 }
 
 header_t *find_smallest_hole(_heap_t *h, u32int size) {
-    u32int true_requested_size = size + sizeof(header_t) + sizeof(footer_t);
-    
     for (int i = 0; i < h->holes.len; i++) {
         header_t *hole = (header_t *)oarray_retrieve(&h->holes, i);
-        if (hole->size >= true_requested_size) {
+        if (hole->size >= size) {
             return hole;
         }
     }
@@ -59,47 +57,68 @@ void remove_hole(_heap_t *h, header_t *hole) {
     }
 }
 
+// Glues the hole with the next hole
+void merge_right(_heap_t *h, header_t *current_hole) {
+    header_t *next_hole = (void *)current_hole + true_size(current_hole->size);
+
+    current_hole->size += next_hole->size + sizeof(header_t) + sizeof(footer_t);
+
+    footer_t *next_footer = (footer_t *)((void *)next_hole + next_hole->size + sizeof(header_t));
+    
+    // Next footer will now point to the current header
+    next_footer->to_header = current_hole;
+    
+    remove_hole(h, next_hole);
+}
+
+int merge_left(_heap_t *h, header_t *freed_block) {
+    footer_t *prev_footer = ((footer_t *)((void *)freed_block -sizeof(footer_t)));
+    header_t *prev_head = prev_footer->to_header;
+
+    //[header][hole][footer][header][hole][footer]
+    if (prev_head && prev_head->is_hole)
+    {
+        prev_head->size += true_size(freed_block->size);
+
+        // Current footer will now point to the previous header
+        // For some reason, current footer points to previous head
+        footer_t *current_footer = (footer_t *)((void*)freed_block + freed_block->size+sizeof(header_t));
+        current_footer->to_header = prev_head;
+        
+        // Current header does not represent a hole anymore
+        // This is probably not necessary, the initial block wasn't a hole
+        remove_hole(h, freed_block);
+        
+        // Merge performed
+        return 1;
+    }
+    // No merge was necessary
+    return 0;
+}
+
 void deallocate(_heap_t *h, void *addr)
 {
     header_t *head = addr - sizeof(header_t);
     header_t *next_head = (void *)head + true_size(head->size);
     footer_t *prev_footer = ((footer_t *)((void *)head - sizeof(footer_t)));
+    
     head->is_hole = 1;
-    int next = 0;
-    int prev = 0;
+    
     if (next_head && next_head->is_hole)
     {
-        head->size += next_head->size;
-        footer_t *next_footer = (footer_t *)((void *)next_head + next_head->size + sizeof(header_t));
-        next_footer->to_header = head;
-        // [header][block][footer][header][block][footer]
-        // [header] 
-        remove_hole(h, next_head);
-        next = 1;
+        merge_right(h, head);
     }
-    if (prev_footer > h->data)
+    
+    int merged_left = 0;
+    if ((void *)prev_footer > h->data)
     {
-        header_t *prev_head = prev_footer->to_header;
-        if (prev_head && prev_head->is_hole)
-        {
-            prev_head->size += head->size;
-            footer_t *current_footer = (footer_t *)(head + head->size + sizeof(header_t));
-            current_footer->to_header = prev_head;
-            remove_hole(h, head);
-            prev = 1;
-        }
+        merged_left = merge_left(h, head);
     }
-    if (!prev)
+    
+    if (!merged_left)
     {
         oarray_insert(&h->holes, head);
     }
-    // oarray_insert(&h->holes, new_hole);
-
-    // find header
-    // assign as a hole
-    // remove footer
-    // add to array of holes
-    // 
 }
 
 
@@ -114,24 +133,21 @@ void *allocate(_heap_t *h, u32int size) {
     hole->is_hole = 0;
 
     // Add footer 
-    footer_t *f = (footer_t *)((void *)hole + size);
+    footer_t *f = (footer_t *)((void *)hole + size+sizeof(header_t));
     f->to_header = hole;
 
-    // The hole should move to the end
     header_t *new_hole = (void *) hole + true_size(size);
     
-    // [h          one block          f] size
-    // [h one block f][h second block f]
-    // new hole size = old_size - header - footer - requested_size
-    // It has a smaller size
     new_hole->size = hole->size - true_size(size);
     hole->size = size;
-    new_hole->is_hole = 1;
-    footer_t *new_f = (footer_t *)((void *)new_hole + new_hole->size + sizeof(header_t));
-    new_f->size =new_hole->size;
-    new_f->to_header = new_hole;
+    
+    if (new_hole->size != 0) {    
+        new_hole->is_hole = 1;
+        footer_t *new_f = (footer_t *)((void *)new_hole + new_hole->size);
+        new_f->to_header = new_hole;
+        oarray_insert(&h->holes, new_hole);
+    }
     remove_hole(h, hole);
-    oarray_insert(&h->holes, new_hole);
 
     return (void*)(hole) + sizeof(header_t);
 }
@@ -151,6 +167,17 @@ void test_heap_simple() {
     header_t *hole = oarray_retrieve(&h->holes, 0);
     ASSERT_EQ(1, hole->is_hole);
     ASSERT_EQ(true_size(500) - sizeof(header_t) - sizeof(footer_t) - 10, hole->size);
+
+
+    // Checking block footer
+    header_t *first_block_header = (void *) res - sizeof(header_t);
+    footer_t *first_block_footer = (void*)h->data + sizeof(header_t) + 10;
+    ASSERT_EQ(first_block_header, first_block_footer->to_header);
+
+    // Checking hole footer
+    header_t *first_hole_header = hole;
+    footer_t *first_hole_footer = (void *)hole + hole->size;
+    ASSERT_EQ(first_hole_header, first_hole_footer->to_header);
 
     void *res2 = allocate(h, 10);
 
@@ -174,7 +201,91 @@ void test_heap_free() {
     ASSERT_EQ(tmp, res2);  
 }
 
+void test_hole_choice() {
+    _heap_t *h = heap_create(500, 0, 0);
+
+    void *res1 = allocate(h, 10);
+    void *res2 = allocate(h, 10);
+    void *res3 = allocate(h, 10);
+
+    // [block][block][block][hole]
+
+    deallocate(h, res2);
+
+    // [block][small hole][block][big hole]
+
+    void *res5 = allocate(h, 10);
+
+    // The allocator chooses the smaller hole
+    ASSERT_EQ(res2, res5);
+}
+
+// Uncomment if merge left test doesn't uncover any bugs 
+// this shows a merge left bug
+
+// void test_hole_choice_2() {
+//     _heap_t *h = heap_create(500, 0, 0);
+
+//     void *res1 = allocate(h, 10);
+//     void *res2 = allocate(h, 40); // future big hole
+//     void *res3 = allocate(h, 10);
+//     void *res4 = allocate(h, 10); // future small hole
+//     void *res5 = allocate(h, 10);
+
+
+//     deallocate(h, res2);
+//     deallocate(h, res3);
+
+//     void *res6 = allocate(h, 10);
+
+//     // The allocator chooses the smaller hole
+//     ASSERT_EQ(res3, res6);
+// }
+
+void test_hole_choice_3() {
+    _heap_t *h = heap_create(500, 0, 0);
+
+    allocate(h, 10);
+    void *res2 = allocate(h, 40); // future big hole
+    allocate(h, 10);
+    void *res4 = allocate(h, 10); // future small hole
+    allocate(h, 10);
+
+
+    deallocate(h, res2);
+    deallocate(h, res4);
+
+    void *res6 = allocate(h, 10);
+
+    // The allocator chooses the smaller hole
+    ASSERT_EQ(res4, res6);
+}
+
+void test_merge_left() {
+    _heap_t *h = heap_create(500, 0, 0);
+
+    void *res1 = allocate(h, 10);
+    void *res2 = allocate(h, 10);
+
+    deallocate(h, res1);
+    deallocate(h, res2);
+
+    void *res3 = allocate(h, 20);
+
+    // Two holes were merged, so the 20b
+    // block can be placed there
+    ASSERT_EQ(res1, res3);
+}
+
 void heap_tests() {
     test_heap_simple();
     test_heap_free();
+    test_hole_choice();
+    // test_hole_choice_2();
+    test_hole_choice_3();
+    test_merge_left();
+
+    // TODO tests:
+    // - merging left
+    // - merging both left and right
 }

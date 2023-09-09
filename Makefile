@@ -12,7 +12,7 @@ OBJS = $(src_files:.c=.o)
 
 all: myos.iso
 # Note: PHONY is important here. Without it, implicit rules will try to build the executable "all", since the prereqs are ".o" files.
-.PHONY: all isobuilder qemu fclean re test_debug test
+.PHONY: all isobuilder qemu fclean re test_debug test test_coverage
 
 %.o : %.c
 	clang -c $(CFLAGS) $< -o $@
@@ -50,9 +50,17 @@ heap/oarray_tests.c heap/oarray.c heap/heap_tests.c
 # test_objs = $(test_files:.c=.o)
 test_flags = -g -I includes --define-macro TEST=true
 
+coverage_flags = -fprofile-instr-generate -fcoverage-mapping
+
 test:
 	clang $(test_files) $(test_flags) -o test_binary 
 	./test_binary
+
+test_coverage:
+	clang $(test_files) $(test_flags) $(coverage_flags) -o test_binary
+	./test_binary
+	xcrun llvm-profdata merge -sparse default.profraw -o default.profdata
+	xcrun llvm-cov export ./test_binary -instr-profile=default.profdata --format lcov > lcov.info
 
 test_debug:
 	clang $(test_files) $(test_flags) -o test_debug

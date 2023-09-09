@@ -23,3 +23,11 @@ peda-session*
 
 test_binary
 test_debug
+
+*.DSYM
+.DS_Store
+
+# Coverage
+*.profdata
+*.profraw
+lcov.info

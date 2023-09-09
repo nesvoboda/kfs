@@ -22,12 +22,13 @@ void *allocate(_heap_t *h, u32int size);
 void free(void *addr);
 
 typedef struct header_s {
+    // Header is ALWAYS the user-accessible TRUE size
+    // DOES NOT INCLUDE HEADER AND FOOTER SIZE
     u32int size;
     int is_hole;
 } header_t;
 
 typedef struct footer_s {
-    u32int size;
     void *to_header;
 } footer_t;
 

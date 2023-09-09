@@ -1,14 +1,21 @@
 #include "bitset.h"
 #include "test.h"
 
-#include <malloc.h>
+// Malloc size functions are different on OS X and Linux
+#ifdef __APPLE__
+# include <malloc/malloc.h>
+# define MALLOC_SIZE(x) malloc_size(x)
+#else
+# include <malloc.h>
+# define MALLOC_SIZE(x) malloc_usable_size(x)
+#endif
 
 void test_bitset_create_test()
 {
 	t_bitset test = bitset_create(65);
 
 	ASSERT_EQ(65, test.size);
-	TEST_ASSERT(11 < malloc_usable_size(test.data));
+	TEST_ASSERT(11 < MALLOC_SIZE(test.data));
 	// 3 ints, all zeroes
 	for (int i = 0; i < 3; i++) {
 		ASSERT_EQ(0, test.data[i]);

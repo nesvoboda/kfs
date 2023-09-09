@@ -1,5 +1,5 @@
-{ 
-   "version": "0.2.0",
+{
+    "version": "0.2.0",
     "configurations": [
         {
             "name": "Debug tests",
@@ -32,15 +32,33 @@
             "request": "launch",
             "miDebuggerPath": "/usr/bin/gdb",
             "miDebuggerArgs": "--cd=${workspaceFolder} --nx",
-            "preLaunchTask":"Make debug",
+            "preLaunchTask": "Make debug",
             "postDebugTask": "Killall qemu",
             "MIMode": "gdb",
-             "program": "${workspaceFolder}/myos.bin",
-              "setupCommands": [
-                {"text": "target remote localhost:1234"},
-                {"text": "break main","ignoreFailures": true}
+            "program": "${workspaceFolder}/myos.bin",
+            "setupCommands": [
+                {
+                    "text": "target remote localhost:1234"
+                },
+                {
+                    "text": "break main",
+                    "ignoreFailures": true
+                }
             ],
             "cwd": "${workspaceFolder}"
         },
+        {
+            "name": "Debug tests (mac)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/test_debug",
+            "args": [],
+            "preLaunchTask": "Make test debug",
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+        }
     ]
 }
