@@ -4,7 +4,7 @@
 
 #ifndef TEST
 # include "ft_printf.h"
-
+  void kpanic(int recoverable);
   #define PANIC(recoverable) printk(ERROR, "PANIC at line %d in file %s", __LINE__, __FILE__);\
     kpanic(recoverable);
   #define ASSERT(x) if (!(x)) {PANIC()}

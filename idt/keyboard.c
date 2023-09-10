@@ -1,7 +1,7 @@
 #include "keyboard.h"
 
 int current_screen = 0;
-uint8_t current_color = 15;
+u8int current_color = 15;
 keyboard_flags_t keyboard_flags = { 0, 0 };
 
 const unsigned char kbdus[128] = {

@@ -40,7 +40,7 @@ void oarray_insert(oarray_t* array, type_t item)
 {
 	int position = find_position(array, item);
 	if (position > array->size) {
-		PANIC();
+		PANIC(0);
 	}
 
 	if (position >= array->len) {

@@ -14,12 +14,11 @@
 #define FT_PRINTF_H
 #define CONVERSIONS "cspdiuxX%"
 #define FLAGS "0-"
-// #include <stdarg.h>
-#include <stdlib.h>
 
 #include "io.h"
 #include "logs.h"
 #include "screen_handler.h"
+#include "utils.h"
 
 typedef struct s_info {
 	char* flags;
@@ -41,7 +40,6 @@ typedef __builtin_va_list va_list;
 /*
 **	Libft functions
 */
-int ft_atoi(const char* str);
 void ft_putchar_fd(char c, int fd);
 void ft_putstr_fd(char* s, int fd);
 char* ft_substr(char const* s, unsigned int start, size_t len);

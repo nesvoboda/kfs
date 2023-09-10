@@ -124,9 +124,9 @@ void register_interrupt_handler(u8int n, isr_t handler)
 	interrupt_handlers[n] = handler;
 }
 
-uint8_t inb(uint16_t port)
+u8int inb(u16int port)
 {
-	uint8_t ret;
+	u8int ret;
 	asm volatile("inb %1, %0"
 				 : "=a"(ret)
 				 : "Nd"(port));
@@ -134,14 +134,14 @@ uint8_t inb(uint16_t port)
 }
 
 /*This function send value to IO location*/
-void outb(uint16_t port, uint8_t val)
+void outb(u16int port, u8int val)
 {
 	asm volatile("outb %0, %1"
 				 :
 				 : "a"(val), "Nd"(port));
 }
 
-void outw(uint16_t port, uint16_t val)
+void outw(u16int port, u16int val)
 {
 	asm volatile("outw %0, %1"
 				 :

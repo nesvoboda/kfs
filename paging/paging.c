@@ -22,9 +22,9 @@ void initialise_paging()
 
 	init_phys_heap();
 
-	u32int addr = 0;
+	uintptr_t addr = 0;
 	// placement address is changed by kmalloc!
-	while (addr < get_placement_address()) {
+	while (addr < (uintptr_t)get_placement_address()) {
 		map(&current_manager, addr, addr, 0, 0);
 		addr += 0x1000;
 	}

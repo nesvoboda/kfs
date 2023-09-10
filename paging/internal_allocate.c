@@ -1,22 +1,24 @@
 #include "internal_allocate.h"
 
 // end is defined in the linker script.
-extern u32int end;
+extern void *end;
+
+typedef unsigned long uintptr_t;
 
 // Some address in the memory where we put our things
 // until virtual memory works
-u32int placement_address = END;
+uintptr_t placement_address = (uintptr_t)END;
 
-u32int get_placement_address()
+void *get_placement_address()
 {
-	return placement_address;
+	return (void *)placement_address;
 }
 
 void set_placement_address(u32int addr) {
 	placement_address = addr;
 }
 
-u32int _internal_kmalloc(u32int size, int align, u32int* phys)
+void *_internal_kmalloc(u32int size, int align, u32int* phys)
 {
 
 	// If address alignment is necessary
@@ -28,31 +30,31 @@ u32int _internal_kmalloc(u32int size, int align, u32int* phys)
 	if (phys != NULL) {
 		*phys = placement_address;
 	}
-	u32int save = placement_address;
+	uintptr_t save = placement_address;
 	placement_address += size;
-	return save;
+	return (void *)save;
 }
 
 // page aligned.
-u32int internal_kmalloc_a(u32int size)
+void *internal_kmalloc_a(u32int size)
 {
 	return _internal_kmalloc(size, 1, NULL);
 }
 
 // returns a physical address.
-u32int internal_kmalloc_p(u32int size, u32int* phys)
+void *internal_kmalloc_p(u32int size, u32int* phys)
 {
 	return _internal_kmalloc(size, 0, phys);
 }
 
 // page aligned and returns a physical address.
-u32int internal_kmalloc_ap(u32int size, u32int* phys)
+void *internal_kmalloc_ap(u32int size, u32int* phys)
 {
 	return _internal_kmalloc(size, 1, phys);
 }
 
 // vanilla (normal).
-u32int internal_kmalloc(u32int size)
+void *internal_kmalloc(u32int size)
 {
 	return _internal_kmalloc(size, 0, NULL);
 }

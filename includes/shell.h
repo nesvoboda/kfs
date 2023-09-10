@@ -4,6 +4,8 @@
 #include "io.h"
 #include "reboot.h"
 #include "paging.h"
+#include "printf.h"
+#include "printmem.h"
 
 void shell();
 

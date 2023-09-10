@@ -17,7 +17,7 @@ void *physical_allocate(size_t size) {
     if (pheap != NULL && pheap->is_initialized) {
         return allocate(&pheap->heap, size);
     }
-    return internal_kmalloc(size);
+    return (void *)internal_kmalloc(size);
 }
 
 void physical_free(void *addr) {

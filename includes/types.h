@@ -1,7 +1,10 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#include <stddef.h>
+typedef unsigned int size_t;
+#define NULL ((void *)0)
+
+typedef unsigned long uintptr_t;
 
 typedef unsigned long long u64int;
 typedef unsigned int u32int;

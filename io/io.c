@@ -26,7 +26,7 @@ int read_finished = 0;
 int bytes_read = 0;
 int desired_count = 0;
 
-void io_add_char(char c, uint8_t color)
+void io_add_char(char c, u8int color)
 {
 	if (c == '\n' || c == '\0') {
 		read_finished = 1;

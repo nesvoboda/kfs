@@ -3,9 +3,6 @@
 
 #include "screen.h"
 #include "utils.h"
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdint.h>
 
 // Enables registration of callbacks for interrupts or IRQs.
 // For IRQs, to ease confusion, use the #defines above as the
@@ -19,10 +16,10 @@ typedef struct registers {
 
 typedef void (*isr_t)(registers_t);
 void init_idt();
-uint8_t inb(uint16_t port);
+u8int inb(u16int port);
 void register_interrupt_handler(u8int n, isr_t handler);
-void outb(uint16_t port, uint8_t val);
-void outw(uint16_t port, uint16_t val);
+void outb(u16int port, u8int val);
+void outw(u16int port, u16int val);
 void init_timer(u32int frequency);
 void keyboard_handler(registers_t regs);
 

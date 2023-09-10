@@ -1,6 +1,6 @@
 #include "cursor.h"
 
-void enable_cursor(uint8_t cursor_start, uint8_t cursor_end)
+void enable_cursor(u8int cursor_start, u8int cursor_end)
 {
 	outb(0x3D4, 0x0A);
 	outb(0x3D5, (inb(0x3D5) & 0xC0) | cursor_start);
@@ -15,14 +15,14 @@ void disable_cursor()
 	outb(0x3D5, 0x20);
 }
 
-void update_cursor(uint16_t pos)
+void update_cursor(u16int pos)
 {
 	// add status zone
 	pos += VGA_WIDTH * 2;
-	// uint16_t pos = y * VGA_WIDTH + x;
+	// u16int pos = y * VGA_WIDTH + x;
 
 	outb(0x3D4, 0x0F);
-	outb(0x3D5, (uint8_t)(pos & 0xFF));
+	outb(0x3D5, (u8int)(pos & 0xFF));
 	outb(0x3D4, 0x0E);
-	outb(0x3D5, (uint8_t)((pos >> 8) & 0xFF));
+	outb(0x3D5, (u8int)((pos >> 8) & 0xFF));
 }

@@ -5,7 +5,7 @@
 # include "utils.h"
 
 typedef struct printmem_command_s {
-	u32int address;
+	uintptr_t address;
 	u32int len;
 	int is_error;
 } printmem_command_t;

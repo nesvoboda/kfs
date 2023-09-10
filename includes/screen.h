@@ -2,8 +2,7 @@
 #define SCREEN_H
 
 #include "utils.h"
-#include <stddef.h>
-#include <stdint.h>
+#include "types.h"
 
 /* Hardware text mode color constants. */
 enum vga_color {
@@ -29,8 +28,8 @@ static const size_t VGA_WIDTH = 80;
 static const size_t VGA_HEIGHT = 25;
 
 void terminal_initialize(void);
-void terminal_setcolor(uint8_t color);
-void terminal_putentryat(char c, uint8_t color, size_t x, size_t y);
+void terminal_setcolor(u8int color);
+void terminal_putentryat(char c, u8int color, size_t x, size_t y);
 void terminal_putchar(char c);
 void terminal_write(const char* data, size_t size);
 void terminal_writestring(const char* data);

@@ -7,6 +7,7 @@
 # define MALLOC_SIZE(x) malloc_size(x)
 #else
 # include <malloc.h>
+# include <stdlib.h>
 # define MALLOC_SIZE(x) malloc_usable_size(x)
 #endif
 

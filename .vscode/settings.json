@@ -44,7 +44,11 @@
         "vector": "c",
         "shell.h": "c",
         "malloc.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "printmem.h": "c",
+        "internal_allocate.h": "c",
+        "stddef.h": "c",
+        "stdlib.h": "c"
     },
     "cmake.configureOnOpen": false
 }

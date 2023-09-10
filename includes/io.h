@@ -9,7 +9,7 @@
 
 #include "screen_handler.h"
 
-void io_add_char(char c, uint8_t color);
+void io_add_char(char c, u8int color);
 void io_erase();
 
 void write(int fd, const void* buf, int count);

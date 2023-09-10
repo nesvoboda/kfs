@@ -8,7 +8,7 @@ int get_chars_until_newline(int pos);
 
 typedef struct text_char {
 	char c;
-	uint8_t color;
+	u8int color;
 } text_char_t;
 
 int insert_character(text_char_t c, int index);

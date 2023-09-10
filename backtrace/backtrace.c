@@ -10,7 +10,7 @@ void backtrace(unsigned int maxFrames)
 	write(1, "Backtrace: (last function first):\n", 34);
 
 	for (unsigned int frame = 0; stk && frame < maxFrames; ++frame) {
-		u32int addr = *((uint32_t*)(stk->eip - 0x4)) + stk->eip;
+		u32int addr = *((u32int*)(stk->eip - 0x4)) + stk->eip;
 		name = addr2name((void*)addr);
 		if (!ft_strncmp(name, "kernel_main", 11)) {
 			printf("In 0x%x: %s\n", addr, name);

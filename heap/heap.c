@@ -161,7 +161,7 @@ void *allocate(_heap_t *h, u32int size) {
 
     if (hole == NULL) {
         // we don't have any more space
-        PANIC()
+        PANIC(0)
     }
 
     hole->is_hole = 0;

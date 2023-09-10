@@ -14,7 +14,7 @@
 #define TEXT_AREA_SIZE TEXT_AREA_LINES* VGA_WIDTH
 
 void screen_handle_scroll(enum direction dir);
-int screen_add_char(char c, uint8_t color);
+int screen_add_char(char c, u8int color);
 void screen_erase();
 void init_screen();
 void refresh_screen();

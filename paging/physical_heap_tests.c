@@ -6,7 +6,7 @@ u32int buffer[500];
 
 void test_allocation_before_init() {
     // Mock actual placement address
-    set_placement_address((u32int)&buffer);
+    set_placement_address((uintptr_t)(void*)&buffer);
 
     // Should have been allocated in placement address
     void *res = physical_allocate(10);

@@ -8,7 +8,3 @@ void *malloc(size_t size) {
     }
     return allocate(&kheap, size);
 }
-
-void *pmalloc(size_t size) {
-    
-}

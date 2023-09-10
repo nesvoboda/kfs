@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include "types.h"
 
 size_t ft_strlen(const char* str)
 {
@@ -20,28 +20,6 @@ size_t ft_strlen(const char* str)
 	while (*str)
 		str++;
 	return ((size_t)(str - start));
-}
-
-int ft_atoi(const char* str)
-{
-	int nbr;
-	int sign;
-
-	nbr = 0;
-	sign = 1;
-	while ((*str) == '\t' || (*str) == '\n' || (*str) == '\v' || (*str) == '\f'
-		|| (*str) == '\r' || (*str) == ' ')
-		str++;
-	if ((*str) == '-' || (*str) == '+') {
-		sign *= ((*str) == '-' ? -1 : 1);
-		str++;
-	}
-	while ((*str) != '\0' && (*str) >= '0' && (*str) <= '9') {
-		nbr *= 10;
-		nbr += (*str) - '0';
-		str++;
-	}
-	return (nbr * sign);
 }
 
 char* ft_strchr(const char* s, int c)

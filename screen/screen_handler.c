@@ -25,7 +25,7 @@ int _len_to_print(int start_position)
 	return count;
 }
 
-static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg)
+static inline u8int vga_entry_color(enum vga_color fg, enum vga_color bg)
 {
 	return fg | bg << 4;
 }
@@ -39,7 +39,7 @@ void _refresh_status_zone()
 				VGA_COLOR_LIGHT_BLUE),
 			x, 0);
 	}
-	uint8_t text_color = vga_entry_color(VGA_COLOR_WHITE, VGA_COLOR_LIGHT_BLUE);
+	u8int text_color = vga_entry_color(VGA_COLOR_WHITE, VGA_COLOR_LIGHT_BLUE);
 	terminal_setcolor(text_color);
 	terminal_writestring_pos("blashOS", 36, 0);
 	for (int y = 1; y < START_LINE; y++) {
@@ -88,7 +88,7 @@ void _refresh_text_zone()
 
 void _print_log_line(int index)
 {
-	uint8_t log_color = vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+	u8int log_color = vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
 
 	struct log* logs = get_logs();
 
@@ -175,7 +175,7 @@ void refresh_screen()
 	refresh_logs();
 }
 
-int screen_add_char(char c, uint8_t color)
+int screen_add_char(char c, u8int color)
 {
 	text_char_t new_char;
 	new_char.c = c;
