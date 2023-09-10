@@ -72,11 +72,10 @@ void page_fault(registers_t regs)
 	int reserved = regs.err_code & 0x8; // Were cpu-reserved bits of page entry overwritten?
 	int ife = regs.err_code & 0x10; // Was this caused by an instruction fetch?
 
-	printk(KERNEL, "PAGE FAULT, present %d, ro %d, us %d, res %d, ife %d", present, rw, us, reserved, ife);
-	printk(KERNEL, "At %p", failing_address);
-	if (ife != 0 || rw != 0) {
-		PAGE_FAULT("Page fault");
-	}
+	printk(ERROR, "PAGE FAULT, present %d, ro %d, us %d, res %d, ife %d", present, rw, us, reserved, ife);
+	printk(ERROR, "At %p", failing_address);
+	// Irrecoverable panic
+	PANIC(0);
 	return;
 }
 

@@ -5,14 +5,8 @@
 #ifndef TEST
 # include "ft_printf.h"
 
-  #define PAGE_FAULT(x) printk(KERNEL, "%s", x);\
-    while (1) { \
-    } \
-
-  #define PANIC() printk(KERNEL, "PANIC at line %d in file %s", __LINE__, __FILE__);\
-    while (1) { \
-    } \
-
+  #define PANIC(recoverable) printk(ERROR, "PANIC at line %d in file %s", __LINE__, __FILE__);\
+    kpanic(recoverable);
   #define ASSERT(x) if (!(x)) {PANIC()}
 
 # else

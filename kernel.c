@@ -85,6 +85,8 @@ void kernel_main(void)
 	// printk(INFO, "The size of a is %d\n", memory_size(a));
 	// memory_map();
 	printmem("addr 0xC0020000 60");
+	// Trigger a recoverable panic
+	PANIC(1);
 	shell();
 }
 // 0x7ffc665008f0:	0xacaffa85	0x00007fbf	0x66500920	0x00007ffc

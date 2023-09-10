@@ -43,7 +43,8 @@
         "unordered_map": "c",
         "vector": "c",
         "shell.h": "c",
-        "malloc.h": "c"
+        "malloc.h": "c",
+        "stdio.h": "c"
     },
     "cmake.configureOnOpen": false
 }
