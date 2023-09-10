@@ -7,6 +7,7 @@
 #include "screen.h"
 #include "screen_handler.h"
 #include "shell.h"
+#include "physheap.h"
 
 extern _heap_t kheap;
 
@@ -63,29 +64,17 @@ void kernel_main(void)
 
 	initialise_paging();
 
-	printk(INFO, "Paging initialized");
 	int* a = allocate(&kheap, sizeof(int));
 	*a = 0xFFFFFF;
 
-	// TODO: 
-	// - heap expansion
-	// - physical heap (optional)
-	// - demo
+	int *b = physical_allocate(sizeof(int));
+	*b = 42;
 
-	printk(INFO, "%p", a);
-	printk(INFO, "%d", *a);
-	// printk(INFO, "%p", b);
-	// printk(INFO, "%c", *b);
-	// deallocate(&kheap, a);
-	// printk(INFO, "%p", b);
-	// a = allocate(&kheap, 100);
-	// *a = 6;
-	// printk(INFO, "%p", a);
-	// printk(INFO, "%d", *a);
-	// printk(INFO, "The size of a is %d\n", memory_size(a));
-	// memory_map();
-	printmem("addr 0xC0020000 60");
-	// Trigger a recoverable panic
+
+	printk(INFO, "Allocated a at %p, val: %d, size: %d bytes", a, *a, memory_size(a));
+	
+	printk(INFO, "Physical b at %p, val: %d, size: %d bytes", b, *b, physical_size(b));
+
 	PANIC(1);
 	shell();
 }

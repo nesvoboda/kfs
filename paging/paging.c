@@ -16,10 +16,11 @@ void initialise_paging()
 	current_manager = init_pmem_manager(total_available_memory);
 	int i = 0;
 
-	// to do: clean
 	for (i = KHEAP_START; i < KHEAP_START + KHEAP_INITIAL_SIZE; i += 0x1000)
 		// map(&current_manager, i, i, 0, 1);
 		_get_page(&current_manager, i);
+
+	init_phys_heap();
 
 	u32int addr = 0;
 	// placement address is changed by kmalloc!

@@ -4,6 +4,7 @@ void oarray_tests();
 void heap_tests();
 void utils_tests();
 void printmem_tests();
+void physical_heap_tests();
 
 int main()
 {
@@ -13,4 +14,5 @@ int main()
 	heap_tests();
 	utils_tests();
 	printmem_tests();
+	physical_heap_tests();
 }

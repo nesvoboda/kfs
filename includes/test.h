@@ -23,5 +23,15 @@ else { \
     exit(-1); \
 } \
 
+#define ASSERT_NEQ(expected, actual) \
+if (expected == actual) { \
+    printf("Failed! Expected %lld and %lld to not be equal, at line %d, file %s\n", (long long)expected, (long long)actual, __LINE__, __FILE__); \
+    exit(-1); \
+} \
+else { \
+    printf("Passed!\n"); \
+} \
+
+
 
 #endif

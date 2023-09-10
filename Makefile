@@ -5,7 +5,8 @@ printf/ft_printf.c printf/ft_printf_string.c printf/ft_printf_pointer.c printf/f
 printf/ft_printf_integer.c printf/ft_printf_uint.c printf/ft_printf_char.c printf/lft_lite.c printf/lft_lite_fd.c \
 printf/ft_printf_format.c logs/logs.c timer/timer.c io/io.c shell/shell.c shell/reboot.c backtrace/backtrace.c \
 elf/elf.c paging/paging.c paging/page.c paging/bitset.c paging/internal_allocate.c \
-heap/heap.c heap/oarray.c paging/printmem.c utils/split.c heap/malloc.c paging/brk.c utils/panic.c
+heap/heap.c heap/oarray.c paging/printmem.c utils/split.c heap/malloc.c paging/brk.c utils/panic.c \
+paging/physical_heap.c
 
 CFLAGS = -target i386-none-elf -nodefaultlibs  -fno-rtti -fno-stack-protector -fno-exceptions -ffreestanding -fno-builtin -nostdlib -g -I includes
 
@@ -49,8 +50,9 @@ test_files = paging/bitset_tests.c paging/bitset.c test/main.c \
 paging/page_tests.c utils/utils.c paging/page.c \
 heap/oarray_tests.c heap/oarray.c heap/heap_tests.c heap/heap.c \
 utils/utils_test.c paging/printmem_test.c paging/printmem.c \
-utils/split.c printf/lft_lite.c
-# test_objs = $(test_files:.c=.o)
+utils/split.c printf/lft_lite.c paging/physical_heap.c \
+paging/physical_heap_tests.c paging/internal_allocate.c
+
 test_flags = -g -I includes --define-macro TEST=true
 
 coverage_flags = -fprofile-instr-generate -fcoverage-mapping

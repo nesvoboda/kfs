@@ -5,11 +5,15 @@ extern u32int end;
 
 // Some address in the memory where we put our things
 // until virtual memory works
-u32int placement_address = &end;
+u32int placement_address = END;
 
 u32int get_placement_address()
 {
 	return placement_address;
+}
+
+void set_placement_address(u32int addr) {
+	placement_address = addr;
 }
 
 u32int _internal_kmalloc(u32int size, int align, u32int* phys)

@@ -5,6 +5,7 @@
 # include "types.h"
 # include "idt.h" // for registers_t
 # include "panic.h"
+# include "physheap.h"
 
 
 void initialise_paging();
