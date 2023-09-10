@@ -82,7 +82,7 @@ void page_fault(registers_t regs)
 
 void extend_current_heap(void *new_address, void *end_address)
 {
-	for (int i = new_address; i < end_address; i += 0x1000)
+	for (uintptr_t i = (uintptr_t) new_address; i < (uintptr_t)end_address; i += 0x1000)
         _alloc_frame(&current_manager, i, 0, 1);
 }
 
