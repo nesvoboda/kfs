@@ -13,7 +13,7 @@ _heap_t *heap_create(u32int size, int is_kernel, int is_readonly) {
     _heap_t *h = KALLOCATE(sizeof(_heap_t));
 
     int index_size = size / 8; 
-
+    h->start = h;
     h->size = size;
     h->is_kernel = is_kernel;
     h->is_readonly = is_readonly;
@@ -139,7 +139,7 @@ void deallocate(_heap_t *h, void *addr)
     
     head->is_hole = 1;
     
-    if (next_head && next_head->is_hole)
+    if ((void *)next_head < h->start + h->size && next_head && next_head->is_hole)
     {
         merge_right(h, head);
     }
@@ -197,9 +197,9 @@ void extend_heap(_heap_t *kheap, void *new_end_address)
 {
     header_t *new_hole_address = (header_t *)(kheap->start + kheap->size);
 
-    new_hole_address->size =  usable_size(new_end_address - (kheap->data + kheap->size));
+    new_hole_address->size =  usable_size(new_end_address - (void *)new_hole_address);
     footer_t *new_footer = (footer_t *)((void *)new_hole_address + new_hole_address->size + sizeof(header_t));
     new_footer->to_header = new_hole_address;
-    kheap->size =  new_end_address - kheap->data;
+    kheap->size =  new_end_address - kheap->start;
     deallocate(kheap, (void *)((void *)new_hole_address + sizeof(header_t)));
 }

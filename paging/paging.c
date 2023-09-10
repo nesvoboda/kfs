@@ -103,8 +103,8 @@ void memory_map() {
 		
 		if (in_region == 1 && !is_page_present) {
 			in_region = 0;
-			page_t previous_page = current_directory->tables[(i-1)/1024]->pages[(i-1)/1024];
-			printf("Region: from %p to %p, rw: %d u: %d a: %d d: %d\n", start_index * 0x1000, (i-1) * 0x1000, previous_page.rw, previous_page.user, previous_page.accessed, previous_page.dirty);
+			page_t previous_page = current_directory->tables[(i-1)/1024]->pages[(i-1)%1024];
+			printf("Region: from %p to %p, rw: %d u: %d a: %d d: %d\n", start_index * 0x1000, (i) * 0x1000, previous_page.rw, previous_page.user, previous_page.accessed, previous_page.dirty);
 		}
 		if (in_region == 0 && is_page_present) {
 			in_region = 1;

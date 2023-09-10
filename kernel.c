@@ -9,6 +9,7 @@
 #include "shell.h"
 #include "physheap.h"
 #include "panic.h"
+#include "brk.h"
 
 extern _heap_t kheap;
 
@@ -71,6 +72,11 @@ void kernel_main(void)
 	int *b = physical_allocate(sizeof(int));
 	*b = 42;
 
+	printk(INFO, "Initial heap size: 0x%x", kheap.size);
+	// add 10 pages to the heap
+	brk((void *)(KHEAP_START + KHEAP_INITIAL_SIZE + 0x10000));
+	sbrk(0x10000);
+	printk(INFO, "New heap size: 0x%x", kheap.size);
 
 	printk(INFO, "Allocated a at %p, val: %d, size: %d bytes", a, *a, memory_size(a));
 	
@@ -79,4 +85,3 @@ void kernel_main(void)
 	PANIC(1);
 	shell();
 }
-// 0x7ffc665008f0:	0xacaffa85	0x00007fbf	0x66500920	0x00007ffc

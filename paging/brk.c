@@ -7,11 +7,11 @@ extern pmem_manager_t current_manager;
 
 int brk(void *end_address)
 {
-    if ((uintptr_t)end_address < KHEAP_START)
+    if ((uintptr_t)end_address < (uintptr_t)kheap.start)
         return -1;     
-    if ((uintptr_t)end_address < KHEAP_START + kheap.size)
+    if ((uintptr_t)end_address < (uintptr_t)(kheap.start + kheap.size))
         return -1;     
-    header_t *new_hole_address = (void *)KHEAP_START + kheap.size;
+    header_t *new_hole_address = (void *)kheap.start + kheap.size;
 
     for (uintptr_t i = (uintptr_t)new_hole_address; i < (uintptr_t)end_address; i += 0x1000)
         _alloc_frame(&current_manager, i, 0, 1);
@@ -22,6 +22,6 @@ int brk(void *end_address)
 
 int sbrk(u32int size)
 {
-    void *current_end = kheap.data + kheap.size;
+    void *current_end = kheap.start + kheap.size;
     return brk(current_end + size);
 }
