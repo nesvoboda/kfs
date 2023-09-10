@@ -41,10 +41,10 @@ void print_pointer(va_list* kwargs, int* ret, t_info info)
 		info.width_spaces += 1;
 	if (info.precision_spaces != 0)
 		info.precision_spaces += 2;
+	ft_putstr_fd("0x", current_fd);
 	if (!info.minus)
 		*ret += put_spaces(info.width_spaces, info.spacer);
 	*ret += 2;
-	ft_putstr_fd("0x", current_fd);
 	if (info.precision > length && info.precision != 0)
 		*ret += put_spaces(info.precision_spaces, '0');
 	if (!(info.precision == 0 && ptr == 0))

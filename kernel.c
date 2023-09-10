@@ -65,8 +65,26 @@ void kernel_main(void)
 
 	printk(INFO, "Paging initialized");
 	int* a = allocate(&kheap, sizeof(int));
-	*a = 3;
-	printk(INFO, "%p", a);
+	*a = 0xFFFFFF;
 
+	// TODO: 
+	// - heap expansion
+	// - physical heap (optional)
+	// - demo
+
+	printk(INFO, "%p", a);
+	printk(INFO, "%d", *a);
+	// printk(INFO, "%p", b);
+	// printk(INFO, "%c", *b);
+	// deallocate(&kheap, a);
+	// printk(INFO, "%p", b);
+	// a = allocate(&kheap, 100);
+	// *a = 6;
+	// printk(INFO, "%p", a);
+	// printk(INFO, "%d", *a);
+	// printk(INFO, "The size of a is %d\n", memory_size(a));
+	// memory_map();
+	printmem("addr 0xC0020000 60");
 	shell();
 }
+// 0x7ffc665008f0:	0xacaffa85	0x00007fbf	0x66500920	0x00007ffc

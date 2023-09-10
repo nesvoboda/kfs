@@ -3,6 +3,7 @@
 #include "backtrace.h"
 #include "io.h"
 #include "reboot.h"
+#include "paging.h"
 
 void shell();
 

@@ -1,6 +1,6 @@
 #include "shell.h"
 
-char line[100];
+char line[3000];
 
 void flush_line()
 {
@@ -24,7 +24,7 @@ help - show this message\n";
 
 int verify_command(size_t len, char* command, char* input)
 {
-	return (!ft_strncmp(command, input, len + 1));
+	return (!ft_strncmp(command, input, len));
 }
 
 void shell()
@@ -43,7 +43,11 @@ void shell()
 			reboot();
 		else if (verify_command(4, "help", line))
 			printf("%s\n", help_message);
-		else
+		else if (verify_command(6, "memmap", line))
+			memory_map();
+		else if (verify_command(8, "printmem", line))
+			printmem(line);
+		else	
 			printf("command not found: %s\n", line);
 	}
 }

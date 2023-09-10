@@ -42,7 +42,7 @@ int bitset_first_set(t_bitset bitset)
 		if (bitset.data[i] != 0) {
 			for (int j = 0; j < 32; j++) {
 				if (bitset.data[i] & (1 << j)) {
-					return j;
+					return i * 4 * 8 + j;
 				}
 			}
 		}
@@ -56,10 +56,10 @@ int bitset_first_unset(t_bitset bitset)
 	int full_integers = bitset.size / 32 + 1;
 
 	for (int i = 0; i < full_integers; i++) {
-		if (bitset.data[i] != 1) {
+		if (bitset.data[i] != ~0) {
 			for (int j = 0; j < 32; j++) {
 				if (!(bitset.data[i] & (1 << j))) {
-					return j;
+					return i * 4 * 8 + j;
 				}
 			}
 		}

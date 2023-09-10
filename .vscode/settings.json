@@ -42,7 +42,8 @@
         "bitset": "c",
         "unordered_map": "c",
         "vector": "c",
-        "shell.h": "c"
+        "shell.h": "c",
+        "malloc.h": "c"
     },
     "cmake.configureOnOpen": false
 }

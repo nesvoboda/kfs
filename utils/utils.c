@@ -69,3 +69,39 @@ void* memcpy(void* dst, const void* src, size_t n)
 	}
 	return (dst);
 }
+
+int to_dec(char hex) {
+	if (hex >= '0' && hex <= '9') {
+		return hex - '0';
+	}
+	if (hex >= 'A' && hex <= 'Z') {
+		return hex - 'A' + 10;
+	}
+	return hex - 'a' + 10;
+}
+
+int is_num(char c) {
+	return c >= '0' && c <= '9';
+}
+
+int is_hex(char c) {
+	return is_num(c) || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+}
+
+// No sign for now
+u32int	ft_atoi_hex(const char *str)
+{
+	int		nbr;
+
+	nbr = 0;
+	while ((*str) == '\t' || (*str) == '\n' || (*str) == '\v' || (*str) == '\f'
+			|| (*str) == '\r' || (*str) == ' ')
+		str++;
+	while ((*str) != '\0' && is_hex(*str))
+	{
+		nbr *= 16;
+		nbr += to_dec(*str);
+		str++;
+	}
+	return (nbr);
+}

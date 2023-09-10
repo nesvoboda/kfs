@@ -82,6 +82,18 @@ void test_bitset_first_unset()
 	ASSERT_EQ(0, bitset_first_unset(bitset));
 }
 
+void test_bitset_first_unset2()
+{
+	u32int test_data[2] = { 0, 0 };
+	t_bitset bitset;
+	bitset.data = test_data;
+	bitset.size = 64;
+
+	ASSERT_EQ(bitset_first_unset(bitset), 0);
+	bitset_set(bitset, 0);
+	ASSERT_EQ(1, bitset_first_unset(bitset));
+}
+
 void bitset_tests()
 {
 	test_bitset_test();
@@ -90,4 +102,5 @@ void bitset_tests()
 	test_bitset_first_set();
 	test_bitset_create_test();
 	test_bitset_first_unset();
+	test_bitset_first_unset2();
 }

@@ -50,6 +50,6 @@ void map(pmem_manager_t *manager, u32int physical_address, u32int virtual_addres
 
 void _alloc_frame(pmem_manager_t *manager, u32int virtual_address, int is_kernel, int is_writeable);
 
-
+void memory_map();
 
 #endif

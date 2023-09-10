@@ -74,5 +74,39 @@ void page_fault(registers_t regs)
 
 	printk(KERNEL, "PAGE FAULT, present %d, ro %d, us %d, res %d, ife %d", present, rw, us, reserved, ife);
 	printk(KERNEL, "At %p", failing_address);
-	PAGE_FAULT("Page fault");
+	if (ife != 0 || rw != 0) {
+		PAGE_FAULT("Page fault");
+	}
+	return;
 }
+
+void memory_map() {
+	printf("-- Memory map ---\n");
+	// for (int i = 0; i < 1024; i++) {
+		
+	// }
+	int start_index = 0;
+	int in_region = 0;
+	page_t this_page;
+	for (int i = 0; i < 1024*1024; i++) {
+		page_table_t *this_table = current_directory->tables[i / 1024];
+		if (this_table != NULL) {
+			this_page = this_table->pages[i % 1024];
+		}
+		int is_page_present = (this_table != NULL) && (this_page.present == 1);
+		
+		if (in_region == 1 && !is_page_present) {
+			in_region = 0;
+			page_t previous_page = current_directory->tables[(i-1)/1024]->pages[(i-1)/1024];
+			printf("Region: from %p to %p, rw: %d u: %d a: %d d: %d\n", start_index * 0x1000, (i-1) * 0x1000, previous_page.rw, previous_page.user, previous_page.accessed, previous_page.dirty);
+		}
+		if (in_region == 0 && is_page_present) {
+			in_region = 1;
+			start_index = i; 
+		}
+	}
+}
+
+
+
+
