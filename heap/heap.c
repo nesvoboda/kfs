@@ -42,14 +42,15 @@ _heap_t *heap_create(u32int size, int is_kernel, int is_readonly) {
     return h;
 }
 
+
 _heap_t heap_place(void *addr, u32int size, int is_kernel, int is_readonly) {
     _heap_t h;
 
     int index_size = size / 8;
     h.size = size;
+    h.start = addr;
     h.is_kernel = is_kernel;
     h.is_readonly = is_readonly;
-
     oarray_t holes = oarray_place(addr, index_size, &header_predicate);
 
     h.data = addr + index_size;
@@ -192,3 +193,13 @@ size_t memory_size(void *addr) {
     return header->size;
 }
 
+void extend_heap(_heap_t *kheap, void *new_end_address)
+{
+    header_t *new_hole_address = (header_t *)(kheap->start + kheap->size);
+
+    new_hole_address->size =  usable_size(new_end_address - (kheap->data + kheap->size));
+    footer_t *new_footer = (footer_t *)((void *)new_hole_address + new_hole_address->size + sizeof(header_t));
+    new_footer->to_header = new_hole_address;
+    kheap->size =  new_end_address - kheap->data;
+    deallocate(kheap, (void *)((void *)new_hole_address + sizeof(header_t)));
+}

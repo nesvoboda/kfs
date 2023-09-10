@@ -17,7 +17,7 @@
 
 typedef struct heap_s {
     void *data;
-    void *index;
+    void *start;
     u32int size;
     int is_kernel;
     int is_readonly;
@@ -45,5 +45,6 @@ typedef struct footer_s {
 
 size_t memory_size(void *addr);
 void deallocate(_heap_t *h, void *addr);
+void extend_heap(_heap_t *kheap, void *new_end_address);
 
 #endif

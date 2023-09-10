@@ -80,6 +80,12 @@ void page_fault(registers_t regs)
 	return;
 }
 
+void extend_current_heap(void *new_address, void *end_address)
+{
+	for (int i = new_address; i < end_address; i += 0x1000)
+        _alloc_frame(&current_manager, i, 0, 1);
+}
+
 void memory_map() {
 	printf("-- Memory map ---\n");
 	// for (int i = 0; i < 1024; i++) {

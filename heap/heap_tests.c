@@ -209,6 +209,19 @@ void test_heap_place() {
     ASSERT_EQ(first_hole_header, first_hole_footer->to_header);
 }
 
+
+void test_heap_extend()
+{
+    u32int dest[100];
+    _heap_t h = heap_place(&dest, 100, 0, 0);
+
+    extend_heap(&h,(void *)&dest + 200);
+    header_t *hole = oarray_retrieve(&h.holes, 0);
+
+    ASSERT_EQ(1, h.holes.len);
+    ASSERT_EQ((void *)h.data, (void *)hole);
+}
+
 void heap_tests() {
     test_heap_create();
     test_heap_simple();
@@ -219,6 +232,7 @@ void heap_tests() {
     test_merge_both();
     test_size();
     test_heap_place();
+    test_heap_extend();
 }
 
 
