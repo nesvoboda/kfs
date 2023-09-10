@@ -4,6 +4,7 @@
 # include "types.h"
 # include "heap.h"
 # include "allocate.h"
+# include "internal_allocate.h"
 
 typedef struct phys_heap_s {
     _heap_t heap;

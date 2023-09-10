@@ -2,6 +2,7 @@
 # define ALLOCATE_H
 
 #ifdef TEST
+  #include <stdlib.h>
 // Real-life, host-machine malloc is used for tests
 # define KALLOCATE(size) malloc(size)
   #define KALLOCATE_P(size, ptr) malloc(size)

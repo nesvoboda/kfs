@@ -1,5 +1,5 @@
 #include "utils.h"
-#include "malloc.h"
+#include "_malloc.h"
 
 static int		count_substrings(char const *s, char c)
 {

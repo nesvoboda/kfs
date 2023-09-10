@@ -15,9 +15,9 @@
     while (1) { \
     } \
 
-  #define PANIC() printf("PANIC at line %d in file %s", __LINE__, __FILE__);\
-    while (1) { \
-    } \
+  #define PANIC(recoverable) \
+    printf("PANIC at line %d in file %s", __LINE__, __FILE__);\
+    
 
   #define ASSERT(x) if (!(x)) {PANIC()}
 # endif

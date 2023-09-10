@@ -48,7 +48,8 @@
         "printmem.h": "c",
         "internal_allocate.h": "c",
         "stddef.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "physheap.h": "c"
     },
     "cmake.configureOnOpen": false
 }
