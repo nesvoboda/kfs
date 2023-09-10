@@ -16,10 +16,10 @@ void halt()
 
 char* help_message = "Welcome to blashOS!\n\
 Print \"help\" to see this message.\n\
-Available commands:\n\
 \n\
-halt - shutdown the system\n\
-reboot - reboot the system\n\
+halt, reboot - shutdown / reboot the system\n\
+printmem 0x2A 10 - print 10 bytes at 0x2A\n\
+memmap - show all mapped page regions\n\
 help - show this message\n";
 
 int verify_command(size_t len, char* command, char* input)
